@@ -1,0 +1,10 @@
+ircserv
+.vscode
+.
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+.bin

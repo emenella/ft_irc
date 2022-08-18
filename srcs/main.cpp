@@ -15,8 +15,11 @@
 
 int main(int ac, char **av)
 {
-    (void)ac;
-    (void)av;
+    if (ac != 3)
+    {
+        std::cout << "Usage: ./ircserv <port> <password>" << std::endl;
+        return (0);
+    }
     try
     {
         Server server(std::atoi(av[1]), av[2]);

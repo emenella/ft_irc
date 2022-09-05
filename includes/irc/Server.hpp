@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:38:35 by bmangin           #+#    #+#             */
-/*   Updated: 2022/05/17 17:38:04 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/05 17:15:08 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ class Server: public SocketServer
 		ChannelMap 		_channels;
 		
 	public:
-		Server(int port, std::string password);
+		Server(int port, std::string password, std::string hostname);
 		~Server() throw();
 
 		std::string 	getPassword() const;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SocketServer.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emenella <emenella@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:31:47 by bmangin           #+#    #+#             */
-/*   Updated: 2022/05/12 15:01:39 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/05 17:17:13 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ class SocketServer: public SocketListener
         void receiveAndSend(Connection& connection);
         void poll();
         void listen();
+        std::string getHostname() const;
      private:
         int isRunning;
         void pushFd(int fd, int events);

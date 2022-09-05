@@ -6,13 +6,13 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:44:27 by bmangin           #+#    #+#             */
-/*   Updated: 2022/05/17 17:38:14 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/05 17:31:25 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc/Server.hpp"
 
-Server::Server(int port, std::string password) : SocketServer("127.0.0.1", port), _password(password)
+Server::Server(int port, std::string password, std::string hostname) : SocketServer(hostname, port), _password(password)
 {
 	_commandes.insert(std::pair<std::string, ACommand*>("NICK", new NICK(this)));
 	_commandes.insert(std::pair<std::string, ACommand*>("PASS", new PASS(this)));
@@ -45,7 +45,7 @@ void			Server::setPassword(std::string password)
 void Server::onConnection(int connectionFd, sockaddr_in& address)
 {
 	SocketServer::onConnection(connectionFd, address);
-    Client *tmp = new Client(connectionFd, address);
+    Client *tmp = new Client(connectionFd, address, *this);
 	std::cout << "New connection IRC from " << *tmp << std::endl;
     fdConnectionMap.insert(std::pair<int, Client*>(connectionFd, tmp));
 }

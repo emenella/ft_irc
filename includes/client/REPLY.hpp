@@ -1,7 +1,6 @@
 #pragma once
 
-#define RPL_WELCOME(nick, user, host) "001 Welcome to the Internet Relay Network " + nick + "!" + user + "@" + host
-
+#define RPL_WELCOME(nick, user, host) "001 " + nick + " Welcome to the Internet Relay Network " + nick + "!" + user + "@" + host
 #define ERR_NOSUCHNICK(nick) "401 " nick " :No such nick/channel"
 #define ERR_NOSUCHCHANNEL(channel) "403 " channel " :No such channel"
 #define ERR_CANNOTSENDTOCHAN(channel) "404 " channel " :Cannot send to channel"

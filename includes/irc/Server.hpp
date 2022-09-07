@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:38:35 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/05 17:15:08 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/07 19:25:57 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include "client/command/PASS.hpp"
 #include "client/command/USER.hpp"
 #include "client/command/JOIN.hpp"
+#include "client/command/PING.hpp"
 
 class Server: public SocketServer
 {

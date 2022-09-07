@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:44:27 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/07 18:03:00 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/07 19:25:42 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ Server::Server(int port, std::string password, std::string hostname) : SocketSer
 	_commandes.insert(std::pair<std::string, ACommand*>("PASS", new PASS(this)));
 	_commandes.insert(std::pair<std::string, ACommand*>("USER", new USER(this)));
 	_commandes.insert(std::pair<std::string, ACommand*>("JOIN", new JOIN(this)));
+	_commandes.insert(std::pair<std::string, ACommand*>("PING", new PING(this)));
 }
 
 Server::~Server() throw()

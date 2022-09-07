@@ -1,25 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   AuthenticationCommand.hpp                          :+:      :+:    :+:   */
+/*   PING.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/10 16:27:36 by emenella          #+#    #+#             */
-/*   Updated: 2022/09/07 19:35:41 by emenella         ###   ########.fr       */
+/*   Created: 2022/09/07 18:46:51 by emenella          #+#    #+#             */
+/*   Updated: 2022/09/07 19:35:53 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-#include "client/ACommand.hpp"
 
-class Server;
+#include "client/AuthenticationCommand.hpp"
 
-class AuthenticationCommand : public ACommand
+class PING: public AuthenticationCommand
 {
     public:
-        AuthenticationCommand(Server *serv);
-        AuthenticationCommand(AuthenticationCommand const& src);
-        virtual ~AuthenticationCommand();
-        virtual int execute(Client &clicli, args_t::iterator begin, args_t::iterator end);
+        PING(Server *serv);
+        PING(PING const& src);
+        ~PING();
+        int execute(Client &clicli, args_t::iterator begin, args_t::iterator end);
 };

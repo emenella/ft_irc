@@ -6,7 +6,7 @@
 /*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:53:39 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/07 18:32:55 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/07 19:20:37 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 Channel::Channel(std::string name, Client & clicli) : _name(name)
 {
-	this->addClient(clicli);
 	this->addOp(clicli);
+	this->addClient(clicli);
 }
 Channel::Channel(Channel const &src)
 {
@@ -68,6 +68,34 @@ std::vector<Client *>::const_iterator Channel::opListBegin() const
 std::vector<Client *>::const_iterator Channel::opListEnd() const
 {
 	return _opList.end();
+}
+
+bool							Channel::isOp(Client * clicli) const
+{
+	std::vector<Client *>::const_iterator op = this->opListBegin();
+	while (op != this->opListEnd())
+	{
+		if ((*op) == clicli)
+			return true;
+		op++;
+	}
+	return false;
+}
+
+std::string						Channel::listClients() const
+{
+	std::string result;
+	
+	std::vector<Client *>::const_iterator user = this->clientListBegin();
+	while (user != this->clientListEnd())
+	{
+		if (isOp(*user))
+			result += "@";
+		result += (*user)->getNickname() + " ";
+		user++;
+	}
+	result.pop_back();
+	return result;
 }
 
 void							Channel::addClient(Client& client)
@@ -126,30 +154,6 @@ void							Channel::removeOp(Client& op)
 			this->_opList.erase(it);
 		it++;
 	}
-}
-
-std::string						Channel::listClients() const
-{
-	std::string result;
-	
-	std::vector<Client *>::const_iterator user = this->clientListBegin();
-	while (user != this->clientListEnd())
-	{
-		std::vector<Client *>::const_iterator op = this->opListBegin();
-		while (op != this->opListEnd())
-		{
-			if ((*op) == (*user))
-			{
-				result += "@";
-				break ;
-			}
-			op++;
-		}
-		result += (*user)->getNickname() + " ";
-		user++;
-	}
-	result.pop_back();
-	return result;
 }
 
 std::ostream&                       operator<<(std::ostream& o, Channel const& rhs)

@@ -6,7 +6,7 @@
 /*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:28:25 by emenella          #+#    #+#             */
-/*   Updated: 2022/09/05 17:58:42 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/07 18:36:41 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	SocketServer::onDisconnection(Connection& connection)
         std::cout << "Disconnection from " << connection.getAddr()<< ":" << connection.getPort() << std::endl;
     #endif
     popFd(connection.getSock());
-    delete &connection;
 }
 
 void	SocketServer::onMessage(Connection& connection, std::string const& message)
@@ -80,7 +79,7 @@ void SocketServer::start()
             {
                 if (it->revents & POLLHUP)
                 {
-                    Connection *connection = fdConnectionMap.at(it->fd);
+                    Connection *connection = fdConnectionMap[it->fd];
                     if (connection)
                         onDisconnection(*connection);
                 }
@@ -167,6 +166,9 @@ void SocketServer::popFd(int fd)
 void SocketServer::poll()
 {
     std::cout << "Waiting Resquest" << std::endl;
+    std::vector<pollfd>::iterator end = pollFds.end();
+    for (std::vector<pollfd>::iterator it = pollFds.begin(); it != end; it++)
+        std::cout << "fd: " << it->fd << " events: " << it->events << " revents " << it->revents << std::endl;
     int ret = ::poll((pollfd *)&pollFds[0], pollFds.size(), -1);
 	if (ret == -1)
         throw SocketException("poll");
@@ -176,5 +178,9 @@ void SocketServer::listen()
 {
     SocketListener::listen();
     std::cout << "Listening on " << hostname << ":" << service << std::endl;
+}
 
+std::string SocketServer::getHostname() const
+{
+    return hostname;
 }

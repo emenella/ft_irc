@@ -6,15 +6,16 @@
 /*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:40:56 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/07 14:45:34 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/07 18:36:32 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client/Client.hpp"
 
-Client::Client(int sock, sockaddr_in &addr) : SocketConnection(sock, addr),
+Client::Client(int sock, sockaddr_in &addr, SocketServer &srv) : SocketConnection(sock, addr),
 											_nickname(""), _username(""),
 											_hostname(""), _servername(""),
+											_serverHostname(srv.getHostname()),
 											_realname(""), _password(""),
 											_register(false), _op(false)
 {
@@ -22,6 +23,17 @@ Client::Client(int sock, sockaddr_in &addr) : SocketConnection(sock, addr),
 
 Client::Client(Client const &rhs) : SocketConnection(rhs)
 {
+	if (this != &rhs)
+	{
+		_nickname = rhs._nickname;
+		_username = rhs._username;
+		_hostname = rhs._hostname;
+		_servername = rhs._servername;
+		_realname = rhs._realname;
+		_password = rhs._password;
+		_register = rhs._register;
+		_op = rhs._op;
+	}
 }
 
 Client::~Client() throw()
@@ -84,9 +96,14 @@ std::string                         Client::getHostname() const
 	return _hostname;
 }
 
-std::string                         Client::getNameServer() const
+std::string                         Client::getServerName() const
 {
 	return _servername;
+}
+
+std::string                         Client::getServerHostname() const
+{
+	return _serverHostname;
 }
 
 std::string                         Client::getRealName() const
@@ -155,4 +172,13 @@ void Client::updateRegister()
     }
     this->setRegister(true);
 	*(this) << RPL_WELCOME(this->getNickname(), this->getUsername(), this->getHostname());
+}
+
+Client &Client::operator<<(std::string const &reply)
+{
+	std::string msg = reply + "\n";
+	std::cout << "Reply : " << msg << std::endl;
+	SocketConnection::operator<<(msg);
+	flush();
+	return *this;
 }

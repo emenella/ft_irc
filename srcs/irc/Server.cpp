@@ -6,13 +6,13 @@
 /*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:44:27 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/07 18:22:26 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/07 18:36:37 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc/Server.hpp"
 
-Server::Server(int port, std::string password) : SocketServer("127.0.0.1", port), _password(password)
+Server::Server(int port, std::string password, std::string hostname) : SocketServer(hostname, port), _password(password)
 {
 	_commandes.insert(std::pair<std::string, ACommand*>("NICK", new NICK(this)));
 	_commandes.insert(std::pair<std::string, ACommand*>("PASS", new PASS(this)));
@@ -45,16 +45,17 @@ void			Server::setPassword(std::string password)
 void Server::onConnection(int connectionFd, sockaddr_in& address)
 {
 	SocketServer::onConnection(connectionFd, address);
-    Client *tmp = new Client(connectionFd, address);
+    Client *tmp = new Client(connectionFd, address, *this);
 	std::cout << "New connection IRC from " << *tmp << std::endl;
     fdConnectionMap.insert(std::pair<int, Client*>(connectionFd, tmp));
 }
 void Server::onDisconnection(Connection& connection)
 {
+	SocketServer::onDisconnection(connection);
 	Client &client = static_cast<Client&>(connection);
 	std::cout << "Disconnection IRC of " << client << std::endl;
-	SocketServer::onDisconnection(connection);
 	fdConnectionMap.erase(connection.getSock());
+	delete &client;
 }
 void Server::onMessage(Connection& connection, std::string const& message)
 {

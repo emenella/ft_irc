@@ -1,6 +1,10 @@
 #pragma once
 
 #define RPL_WELCOME(nick, user, host) "001 Welcome to the Internet Relay Network " + nick + "!" + user + "@" + host
+#define RPL_TOPIC(client, channel, topic) client + " " + channel + " :" + topic
+#define RPL_NAMREPLY(nick, channel, listUsers) "353 " + nick + "=" + channel + " :" + listUsers
+#define RPL_ENDOFNAMES(nick, channel) "366 " + nick + " " + channel + " :End of NAMES list"
+#define JOIN_MESSAGE(nick, userName, userIP, channel) ":" + nick + "!" + userName + "@" + userIP + " JOIN " + channel
 
 #define ERR_NOSUCHNICK(nick) "401 " nick " :No such nick/channel"
 #define ERR_NOSUCHCHANNEL(channel) "403 " channel " :No such channel"

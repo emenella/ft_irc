@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:38:35 by bmangin           #+#    #+#             */
-/*   Updated: 2022/05/17 17:38:04 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/07 15:45:44 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ class Server: public SocketServer
 		void			onMessage(Connection& connection, std::string const& message);
 
 		void 			parseCommand(std::string const &message, Client& client);
-		int 			createChannel(std::string const &name);
 		int 			joinChannel(std::string const &name, Client& client);
 		int 			leaveChannel(std::string const &name, Client& client);
+		void			debugChannel() const;
 		ConnectionMap::const_iterator begin() const;
 		ConnectionMap::const_iterator end() const;
 };

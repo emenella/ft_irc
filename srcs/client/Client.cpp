@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:40:56 by bmangin           #+#    #+#             */
-/*   Updated: 2022/05/17 17:21:56 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/07 14:45:34 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ bool                                Client::isInChannel(std::string name) const
 	return false;
 }
 
-std::ostream &                     operator<<(std::ostream & o, Client const &rhs)
+std::ostream &						operator<<(std::ostream & o, Client const &rhs)
 {
 	o << "Client(" << rhs.getNickname() << "): User=" << rhs.getUsername();
 	if (rhs.getRegister())

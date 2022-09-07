@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 19:30:04 by emenella          #+#    #+#             */
-/*   Updated: 2022/05/17 17:21:30 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/07 17:32:39 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ class Client: public SocketConnection
         void                                setServerName(std::string nameserver);
         void                                setRealName(std::string realname);
         void                                setPassword(std::string password);
-        void                                setRegister(bool register);
+        void                                setRegister(bool bool_);
         
         
         std::string                         getUsername() const;

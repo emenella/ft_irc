@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SocketServer.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:28:25 by emenella          #+#    #+#             */
-/*   Updated: 2022/05/17 18:29:23 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/05 17:58:42 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,7 @@ void SocketServer::poll()
 {
     std::cout << "Waiting Resquest" << std::endl;
     int ret = ::poll((pollfd *)&pollFds[0], pollFds.size(), -1);
-    if (ret == -1)
+	if (ret == -1)
         throw SocketException("poll");
 }
 

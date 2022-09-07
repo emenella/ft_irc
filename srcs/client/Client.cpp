@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:40:56 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/07 18:10:38 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/07 18:18:09 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,7 @@ void Client::updateRegister()
 
 Client &Client::operator<<(std::string const &reply)
 {
-	std::string msg = _serverHostname + " " + reply + "\n";
+	std::string msg = reply + "\n";
 	std::cout << "Reply : " << msg << std::endl;
 	SocketConnection::operator<<(msg);
 	flush();

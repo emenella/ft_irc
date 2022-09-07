@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:44:27 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/07 19:25:42 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/07 19:44:05 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,32 @@ void Server::onMessage(Connection& connection, std::string const& message)
 	parseCommand(message, client);
 }
 
+void Server::debugChannel() const
+{
+	ChannelMap::const_iterator it = this->_channels.begin();
+	while (it != this->_channels.end())
+	{
+		Channel * chan = it->second;
+		std::cout << "chan [" << chan->getName() << "]" << std::endl;
+		std::cout << "chan mods : " << chan->getMods() << std::endl;
+		std::cout << "clients connected :" << std::endl;
+		std::vector<Client *>::const_iterator it_chan = chan->clientListBegin();
+		while (it_chan != chan->clientListEnd())
+		{
+			std::cout << "	" <<(*it_chan)->getNickname() << std::endl;
+			it_chan++;
+		}
+		std::cout << "operators :" << std::endl;
+		it_chan = chan->opListBegin();
+		while (it_chan != chan->opListEnd())
+		{
+			std::cout << "	" <<(*it_chan)->getNickname() << std::endl;
+			it_chan++;
+		}
+		it++;
+	}
+}
+
 void Server::parseCommand(std::string const &message, Client& client)
 {
 	size_t i = 0;
@@ -88,27 +114,21 @@ void Server::parseCommand(std::string const &message, Client& client)
 		ACommand *command = it->second;
 		command->execute(client, str.begin(), str.end());
 	}
-	
-}
-
-int Server::createChannel(std::string const &name)
-{
-	if (_channels.find(name) == _channels.end())
-	{
-		_channels.insert(std::pair<std::string, Channel*>(name, new Channel(name)));
-		return 1;
-	}
-	return 0;
 }
 
 int Server::joinChannel(std::string const &name, Client& client)
 {
+	// TO DO : test mods and acces before adding clicli
 	if (_channels.find(name) != _channels.end())
 	{
 		_channels.at(name)->addClient(client);
 		return 1;
 	}
-	return 0;
+	else
+	{
+		_channels.insert(std::pair<std::string, Channel *>(name, new Channel(name, client)));
+		return 1;
+	}
 }
 
 int Server::leaveChannel(std::string const &name, Client& client)

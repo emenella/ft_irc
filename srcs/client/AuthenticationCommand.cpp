@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   AuthenticationCommand.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:28:08 by emenella          #+#    #+#             */
-/*   Updated: 2022/09/07 19:40:51 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/07 19:43:48 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 

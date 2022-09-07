@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SocketServer.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:28:25 by emenella          #+#    #+#             */
-/*   Updated: 2022/09/07 18:02:49 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/07 18:36:41 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ void SocketServer::poll()
     for (std::vector<pollfd>::iterator it = pollFds.begin(); it != end; it++)
         std::cout << "fd: " << it->fd << " events: " << it->events << " revents " << it->revents << std::endl;
     int ret = ::poll((pollfd *)&pollFds[0], pollFds.size(), -1);
-    if (ret == -1)
+	if (ret == -1)
         throw SocketException("poll");
 }
 

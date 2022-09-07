@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:28:25 by emenella          #+#    #+#             */
-/*   Updated: 2022/09/05 17:17:43 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/07 13:34:32 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,9 @@ void SocketServer::popFd(int fd)
 void SocketServer::poll()
 {
     std::cout << "Waiting Resquest" << std::endl;
+    std::vector<pollfd>::iterator end = pollFds.end();
+    for (std::vector<pollfd>::iterator it = pollFds.begin(); it != end; it++)
+        std::cout << "fd: " << it->fd << " events: " << it->events << " revents " << it->revents << std::endl;
     int ret = ::poll((pollfd *)&pollFds[0], pollFds.size(), -1);
     if (ret == -1)
         throw SocketException("poll");

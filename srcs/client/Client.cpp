@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:40:56 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/07 13:29:20 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/07 16:26:02 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,5 +179,6 @@ Client &Client::operator<<(std::string const &reply)
 	std::string msg = _serverHostname + " " + reply;
 	std::cout << "Reply : " << msg << std::endl;
 	SocketConnection::operator<<(msg);
+	flush();
 	return *this;
 }

@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:28:25 by emenella          #+#    #+#             */
-/*   Updated: 2022/09/07 13:34:32 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/07 18:02:49 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	SocketServer::onDisconnection(Connection& connection)
         std::cout << "Disconnection from " << connection.getAddr()<< ":" << connection.getPort() << std::endl;
     #endif
     popFd(connection.getSock());
-    delete &connection;
 }
 
 void	SocketServer::onMessage(Connection& connection, std::string const& message)
@@ -80,7 +79,7 @@ void SocketServer::start()
             {
                 if (it->revents & POLLHUP)
                 {
-                    Connection *connection = fdConnectionMap.at(it->fd);
+                    Connection *connection = fdConnectionMap[it->fd];
                     if (connection)
                         onDisconnection(*connection);
                 }

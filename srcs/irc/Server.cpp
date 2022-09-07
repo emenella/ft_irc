@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:44:27 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/07 13:20:11 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/07 18:03:00 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,11 @@ void Server::onConnection(int connectionFd, sockaddr_in& address)
 }
 void Server::onDisconnection(Connection& connection)
 {
+	SocketServer::onDisconnection(connection);
 	Client &client = static_cast<Client&>(connection);
 	std::cout << "Disconnection IRC of " << client << std::endl;
-	SocketServer::onDisconnection(connection);
 	fdConnectionMap.erase(connection.getSock());
+	delete &client;
 }
 void Server::onMessage(Connection& connection, std::string const& message)
 {

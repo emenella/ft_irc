@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:38:35 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/07 19:43:43 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/08 15:48:21 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ class Server: public SocketServer
 		ChannelMap 		_channels;
 		
 	public:
-		Server(int port, std::string password, std::string hostname);
+		Server(int port, std::string password, std::string hostname, bool verbose = false);
 		~Server() throw();
 
 		std::string 	getPassword() const;

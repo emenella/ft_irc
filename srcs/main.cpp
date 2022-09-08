@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 18:25:38 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/05 17:19:03 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/08 16:11:38 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,22 @@
 
 int main(int ac, char **av)
 {
-    if (ac != 3)
+    if (ac < 3)
     {
         std::cout << "Usage: ./ircserv <port> <password>" << std::endl;
         return (0);
     }
     try
     {
-        Server server(std::atoi(av[1]), av[2], "127.0.0.1");
+        int i = 0;
+        bool verbose = false;
+        while (i < ac)
+        {
+            if (std::strncmp(av[i], "-v", 3) == 0)
+                verbose = true;
+            i++;
+        }
+        Server server(std::atoi(av[1]), av[2], "127.0.0.1", verbose);
         server.start();
     }
     catch(std::exception &e)

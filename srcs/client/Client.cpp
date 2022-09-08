@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:40:56 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/07 18:36:32 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/08 16:16:06 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,7 +177,7 @@ void Client::updateRegister()
 Client &Client::operator<<(std::string const &reply)
 {
 	std::string msg = reply + "\n";
-	std::cout << "Reply : " << msg << std::endl;
+	std::cout << "Message to " << *(this) << ": " << msg;
 	SocketConnection::operator<<(msg);
 	flush();
 	return *this;

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:44:27 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/07 19:44:05 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/08 15:45:39 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc/Server.hpp"
 
-Server::Server(int port, std::string password, std::string hostname) : SocketServer(hostname, port), _password(password)
+Server::Server(int port, std::string password, std::string hostname, bool verbose) : SocketServer(hostname, port, verbose), _password(password)
 {
 	_commandes.insert(std::pair<std::string, ACommand*>("NICK", new NICK(this)));
 	_commandes.insert(std::pair<std::string, ACommand*>("PASS", new PASS(this)));
@@ -61,10 +61,6 @@ void Server::onDisconnection(Connection& connection)
 void Server::onMessage(Connection& connection, std::string const& message)
 {
 	SocketServer::onMessage(connection, message);
-	if (message == "EXIT")
-	{
-		stop();
-	}
 	Client &client = static_cast<Client&>(connection);
 	std::cout << "Message from " << client << ": " << message << std::endl;
 	parseCommand(message, client);

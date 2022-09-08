@@ -6,7 +6,7 @@
 /*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:53:39 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/08 16:28:39 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/08 18:41:37 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,11 +127,18 @@ void							Channel::removeClient(Client& client)
 	{
 		if ((*it)->getSock() == client.getSock())
 		{
+			std::vector<Client *>::const_iterator chan_user = this->clientListBegin();
+			while (chan_user != this->clientListEnd())
+			{
+				*(*chan_user) << PART_MESSAGE(client.getNickname(), client.getUsername(), client.getAddr(), this->getName());
+				chan_user++;
+			}
 			this->_clientList.erase(it);
 			return ;
 		}
 		it++;
 	}
+	client << ERR_NOTONCHANNEL(this->getName());
 }
 
 void							Channel::addOp(Client& op)

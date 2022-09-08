@@ -5,9 +5,12 @@
 #define RPL_NAMREPLY(nick, channel, listUsers) "353 " + nick + " = " + channel + " :" + listUsers
 #define RPL_ENDOFNAMES(nick, channel) "366 " + nick + " " + channel + " :End of NAMES list"
 #define JOIN_MESSAGE(nick, userName, userIP, channel) ":" + nick + "!" + userName + "@" + userIP + " JOIN " + channel
+#define PART_MESSAGE(nick, userName, userIP, channel) ":" + nick + "!" + userName + "@" + userIP + " PART " + channel
 
 #define ERR_NOSUCHNICK(nick) "401 " nick " :No such nick/channel"
-#define ERR_NOSUCHCHANNEL(channel) "403 " channel " :No such channel"
+#define ERR_BADCARCHAN(chan) "432 JOIN " + chan + " :Bad characters"
+#define ERR_NOSUCHCHANNEL(channel) "403 " + channel + " :No such channel"
+#define ERR_NOTONCHANNEL(channel) "442 " + channel + " :You're not on that channel"
 #define ERR_CANNOTSENDTOCHAN(channel) "404 " channel " :Cannot send to channel"
 #define ERR_UNKNOWNCOMMAND(command) "421 "  command  " :Unknown command"
 #define ERR_NONICKNAMEGIVEN "431 :No nickname given"

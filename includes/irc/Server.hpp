@@ -6,7 +6,7 @@
 /*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:38:35 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/07 18:36:26 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/08 16:01:46 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ class Server: public SocketServer
 
 		void 			parseCommand(std::string const &message, Client& client);
 		int 			joinChannel(std::string const &name, Client& client);
-		int 			leaveChannel(std::string const &name, Client& client);
+		void 			leaveChannel(Client& client);
 		void			debugChannel() const;
 		ConnectionMap::const_iterator begin() const;
 		ConnectionMap::const_iterator end() const;

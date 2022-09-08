@@ -1,6 +1,6 @@
 #pragma once
 
-#define RPL_WELCOME(nick, user, host) "001 : Welcome to the Internet Relay Network " + nick + "!" + user + "@" + host
+#define RPL_WELCOME(nick, user, host) "001 " + nick + " :Welcome to the Internet Relay Network " + nick + "!" + user + "@" + host
 #define RPL_TOPIC(client, channel, topic) client + " " + channel + " :" + topic
 #define RPL_NAMREPLY(nick, channel, listUsers) "353 " + nick + " = " + channel + " :" + listUsers
 #define RPL_ENDOFNAMES(nick, channel) "366 " + nick + " " + channel + " :End of NAMES list"

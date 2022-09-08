@@ -6,7 +6,7 @@
 /*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 21:32:08 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/07 19:15:27 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/08 16:21:56 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ class Channel
 		void							removeOp(Client & op);
 		bool							isOp(Client * clicli) const;
 		std::string						listClients() const;
+		bool							isEmpty() const;
 };
 
 std::ostream&                       operator<<(std::ostream& o, Channel const& rhs);

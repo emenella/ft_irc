@@ -6,7 +6,7 @@
 /*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:44:27 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/07 18:36:37 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/08 16:28:28 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,9 @@ void Server::onConnection(int connectionFd, sockaddr_in& address)
 }
 void Server::onDisconnection(Connection& connection)
 {
-	SocketServer::onDisconnection(connection);
 	Client &client = static_cast<Client&>(connection);
+	leaveChannel(client);
+	SocketServer::onDisconnection(connection);
 	std::cout << "Disconnection IRC of " << client << std::endl;
 	fdConnectionMap.erase(connection.getSock());
 	delete &client;
@@ -67,6 +68,7 @@ void Server::onMessage(Connection& connection, std::string const& message)
 	Client &client = static_cast<Client&>(connection);
 	std::cout << "Message from " << client << ": " << message << std::endl;
 	parseCommand(message, client);
+	debugChannel();
 }
 
 void Server::debugChannel() const
@@ -130,14 +132,24 @@ int Server::joinChannel(std::string const &name, Client& client)
 	}
 }
 
-int Server::leaveChannel(std::string const &name, Client& client)
+void Server::leaveChannel(Client& client)
 {
-	if (_channels.find(name) != _channels.end())
+	std::map<std::string, Channel*>::const_iterator chan = this->_channels.begin();
+	std::vector<std::string> empty_chan;
+	while (chan != this->_channels.end())
 	{
-		_channels.at(name)->removeClient(client);
-		return 1;
+		chan->second->removeClient(client);
+		chan->second->removeOp(client);
+		if (chan->second->isEmpty())
+			empty_chan.push_back(chan->second->getName());
+		chan++;
 	}
-	return 0;
+	std::vector<std::string>::const_iterator it = empty_chan.begin();
+	while (it != empty_chan.end())
+	{
+		this->_channels.erase(*it);
+		it++;
+	}
 }
 
 std::map<int, SocketConnection*>::const_iterator Server::begin() const

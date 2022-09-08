@@ -6,7 +6,7 @@
 /*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:53:39 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/07 19:20:37 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/08 16:28:39 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,10 @@ void							Channel::removeClient(Client& client)
 	while (it != this->clientListEnd())
 	{
 		if ((*it)->getSock() == client.getSock())
+		{
 			this->_clientList.erase(it);
+			return ;
+		}
 		it++;
 	}
 }
@@ -151,9 +154,17 @@ void							Channel::removeOp(Client& op)
 	while (it != this->opListEnd())
 	{
 		if ((*it)->getSock() == op.getSock())
+		{
 			this->_opList.erase(it);
+			return ;
+		}
 		it++;
 	}
+}
+
+bool							Channel::isEmpty() const
+{
+	return this->_clientList.empty();
 }
 
 std::ostream&                       operator<<(std::ostream& o, Channel const& rhs)

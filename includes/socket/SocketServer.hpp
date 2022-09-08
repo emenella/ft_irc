@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:31:47 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/05 17:17:13 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/08 15:43:33 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ class SocketServer: public SocketListener
 	    typedef	std::map<int, Connection*>		ConnectionMap;
 	    typedef	std::queue<int>					ConnectionQueue;
         
-        SocketServer(std::string const& hostname, int service);
+        SocketServer(std::string const& hostname, int service, bool verbose);
         SocketServer(SocketServer const &src);
         SocketServer &operator=(SocketServer const &rhs);
         ~SocketServer();
@@ -43,7 +43,8 @@ class SocketServer: public SocketListener
         void listen();
         std::string getHostname() const;
      private:
-        int isRunning;
+        bool isRunning;
+        bool isVerbose;
         void pushFd(int fd, int events);
         void popFd(int fd);
     protected:

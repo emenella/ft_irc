@@ -3,27 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   SocketServer.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:28:25 by emenella          #+#    #+#             */
-/*   Updated: 2022/09/07 18:36:41 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/08 16:10:38 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "socket/SocketServer.hpp"
 
-SocketServer::SocketServer(std::string const& hostname, int service): SocketListener(), isRunning(false), hostname(hostname), service(service), timeout(TIMEOUT)
+SocketServer::SocketServer(std::string const& hostname, int service, bool verbose = false): SocketListener(), isRunning(false), isVerbose(verbose), hostname(hostname), service(service), timeout(TIMEOUT)
 {
+    if (isVerbose)
+        std::cout << "SocketServer::SocketServer()" << std::endl;
    pushFd(sock, POLLIN);
 }
 
 SocketServer::SocketServer(SocketServer const &src): SocketListener(src)
 {
+    if (isVerbose)
+        std::cout << "SocketServer::SocketServer()" << std::endl;
     pushFd(src.sock, POLLIN);
 }
 
 SocketServer &SocketServer::operator=(SocketServer const &rhs)
 {
+    if (isVerbose)
+        std::cout << "SocketServer::SocketServer()" << std::endl;
     SocketListener::operator=(rhs);
     return *this;
 }
@@ -31,25 +37,22 @@ SocketServer &SocketServer::operator=(SocketServer const &rhs)
 SocketServer::~SocketServer()
 {
     popFd(sock);
-    #ifdef DEBUG
+    if (isVerbose)
         std::cout << "SocketServer::~SocketServer()" << std::endl;
-    #endif
 }
 
 void	SocketServer::onConnection(int connectionFd, sockaddr_in& address)
 {
     (void)address;
-    #ifdef DEBUG
+    if (isVerbose)
         std::cout << "New connection from " << inet_ntoa(address.sin_addr) << ":" << ntohs(address.sin_port) << std::endl;
-    #endif
     pushFd(connectionFd, POLLIN | POLLHUP);
 }
 
 void	SocketServer::onDisconnection(Connection& connection)
 {
-    #ifdef DEBUG
+    if (isVerbose)
         std::cout << "Disconnection from " << connection.getAddr()<< ":" << connection.getPort() << std::endl;
-    #endif
     popFd(connection.getSock());
 }
 
@@ -58,9 +61,8 @@ void	SocketServer::onMessage(Connection& connection, std::string const& message)
     (void)connection;
     if (message.empty())
         return;
-    #ifdef DEBUG
+    if (isVerbose)
         std::cout << "Message from " << connection.getAddr() << ":" << connection.getPort() << ": " << message << std::endl;
-    #endif
 }
 
 void SocketServer::start()
@@ -145,6 +147,8 @@ void SocketServer::receiveAndSend(Connection &connection)
 
 void SocketServer::pushFd(int fd, int events)
 {
+    if (isVerbose)
+        std::cout << "SocketServer::pushFd(" << fd << ")" << std::endl;
     pollfd pollfd;
     pollfd.fd = fd;
     pollfd.events = events;
@@ -153,6 +157,8 @@ void SocketServer::pushFd(int fd, int events)
 
 void SocketServer::popFd(int fd)
 {
+    if (isVerbose)
+        std::cout << "SocketServer::popFd(" << fd << ")" << std::endl;
     for (std::vector<pollfd>::iterator it = pollFds.begin(); it != pollFds.end(); ++it)
     {
         if (it->fd == fd)
@@ -165,10 +171,8 @@ void SocketServer::popFd(int fd)
 
 void SocketServer::poll()
 {
-    std::cout << "Waiting Resquest" << std::endl;
-    std::vector<pollfd>::iterator end = pollFds.end();
-    for (std::vector<pollfd>::iterator it = pollFds.begin(); it != end; it++)
-        std::cout << "fd: " << it->fd << " events: " << it->events << " revents " << it->revents << std::endl;
+    if (isVerbose)
+        std::cout << "Waiting Resquest" << std::endl;
     int ret = ::poll((pollfd *)&pollFds[0], pollFds.size(), -1);
 	if (ret == -1)
         throw SocketException("poll");
@@ -177,7 +181,8 @@ void SocketServer::poll()
 void SocketServer::listen()
 {
     SocketListener::listen();
-    std::cout << "Listening on " << hostname << ":" << service << std::endl;
+    if (isVerbose)
+        std::cout << "Listening on " << hostname << ":" << service << std::endl;
 }
 
 std::string SocketServer::getHostname() const

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SocketConnection.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:28:18 by emenella          #+#    #+#             */
-/*   Updated: 2022/09/07 18:36:43 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/08 16:30:10 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,6 @@ SocketConnection::~SocketConnection()
 {
     this->flush();
     readBuffer.clear();
-    #ifdef DEBUG
-        std::cout << "SocketConnection::~SocketConnection()" << std::endl;
-    #endif
 }
 
 std::string SocketConnection::getAddr()

@@ -6,18 +6,19 @@
 /*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:44:27 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/08 16:28:28 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/08 16:48:55 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc/Server.hpp"
 
-Server::Server(int port, std::string password, std::string hostname) : SocketServer(hostname, port), _password(password)
+Server::Server(int port, std::string password, std::string hostname, bool verbose) : SocketServer(hostname, port, verbose), _password(password)
 {
 	_commandes.insert(std::pair<std::string, ACommand*>("NICK", new NICK(this)));
 	_commandes.insert(std::pair<std::string, ACommand*>("PASS", new PASS(this)));
 	_commandes.insert(std::pair<std::string, ACommand*>("USER", new USER(this)));
 	_commandes.insert(std::pair<std::string, ACommand*>("JOIN", new JOIN(this)));
+	_commandes.insert(std::pair<std::string, ACommand*>("PING", new PING(this)));
 }
 
 Server::~Server() throw()
@@ -61,14 +62,9 @@ void Server::onDisconnection(Connection& connection)
 void Server::onMessage(Connection& connection, std::string const& message)
 {
 	SocketServer::onMessage(connection, message);
-	if (message == "EXIT")
-	{
-		stop();
-	}
 	Client &client = static_cast<Client&>(connection);
 	std::cout << "Message from " << client << ": " << message << std::endl;
 	parseCommand(message, client);
-	debugChannel();
 }
 
 void Server::debugChannel() const

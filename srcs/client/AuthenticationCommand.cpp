@@ -6,7 +6,7 @@
 /*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:28:08 by emenella          #+#    #+#             */
-/*   Updated: 2022/09/05 18:00:29 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/07 19:43:48 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,18 +30,6 @@ int AuthenticationCommand::execute(Client &clicli, args_t::iterator begin, args_
 {
     (void)begin;
     (void)end;
-    if (clicli.getNickname().empty())
-    {
-        clicli << "Usage: NICK <nickname>";
-    }
-    if (clicli.getPassword().empty())
-    {
-        clicli << "Usage: PASSWORD <password>";
-    }
-    if (clicli.getUsername().empty())
-    {
-        clicli << "Usage: USER <username>";
-    }
     if (clicli.getNickname().empty() || clicli.getPassword().empty() || clicli.getUsername().empty())
     {
         return 0;

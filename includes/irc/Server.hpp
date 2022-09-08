@@ -6,7 +6,7 @@
 /*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:38:35 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/08 16:01:46 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/08 16:46:06 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include "client/command/PASS.hpp"
 #include "client/command/USER.hpp"
 #include "client/command/JOIN.hpp"
+#include "client/command/PING.hpp"
 
 class Server: public SocketServer
 {
@@ -32,7 +33,7 @@ class Server: public SocketServer
 		ChannelMap 		_channels;
 		
 	public:
-		Server(int port, std::string password, std::string hostname);
+		Server(int port, std::string password, std::string hostname, bool verbose = false);
 		~Server() throw();
 
 		std::string 	getPassword() const;

@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:28:14 by emenella          #+#    #+#             */
-/*   Updated: 2022/05/10 16:28:16 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/08 16:30:14 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,6 @@ Socket &Socket::operator=(Socket const &rhs)
 Socket::~Socket()
 {
     this->close();
-    #ifdef DEBUG
-        std::cout << "SocketListener::~SocketListener()" << std::endl;
-    #endif
 }
 
 int Socket::getSock() const

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:44:27 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/13 17:52:02 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/13 18:48:56 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 Server::Server(int port, std::string password, std::string hostname, bool verbose) : SocketServer(hostname, port, verbose), _password(password)
 {
+	
+	signal(SIGINT, SocketServer::stop);
 	_commandes.insert(std::pair<std::string, ACommand*>("NICK", new NICK(this)));
 	_commandes.insert(std::pair<std::string, ACommand*>("PASS", new PASS(this)));
 	_commandes.insert(std::pair<std::string, ACommand*>("USER", new USER(this)));

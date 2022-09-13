@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:31:47 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/08 15:43:33 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/13 18:57:34 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 #include "socket/SocketListener.hpp"
 
 #define TIMEOUT 3*60*1000
-
 
 class SocketServer: public SocketListener
 {
@@ -37,13 +36,13 @@ class SocketServer: public SocketListener
 	    virtual void		onMessage(Connection& connection, std::string const& message);
 
         void start();
-        void stop();
+        static void stop(int code);
         void receiveAndSend(Connection& connection);
         void poll();
         void listen();
         std::string getHostname() const;
      private:
-        bool isRunning;
+        static bool isRunning;
         bool isVerbose;
         void pushFd(int fd, int events);
         void popFd(int fd);

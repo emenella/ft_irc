@@ -6,13 +6,15 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:28:25 by emenella          #+#    #+#             */
-/*   Updated: 2022/09/08 16:10:38 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/13 19:02:46 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "socket/SocketServer.hpp"
 
-SocketServer::SocketServer(std::string const& hostname, int service, bool verbose = false): SocketListener(), isRunning(false), isVerbose(verbose), hostname(hostname), service(service), timeout(TIMEOUT)
+bool SocketServer::isRunning = false;
+
+SocketServer::SocketServer(std::string const& hostname, int service, bool verbose = false): SocketListener(), isVerbose(verbose), hostname(hostname), service(service), timeout(TIMEOUT)
 {
     if (isVerbose)
         std::cout << "SocketServer::SocketServer()" << std::endl;
@@ -110,9 +112,11 @@ void SocketServer::start()
     }
 }
 
-void SocketServer::stop()
+void SocketServer::stop(int code)
 {
-    isRunning = false;
+    (void)code;
+    std::cout << "Stopping ..." << std::endl;
+    SocketServer::isRunning = false;
 }
 
 void SocketServer::receiveAndSend(Connection &connection)
@@ -175,7 +179,7 @@ void SocketServer::poll()
         std::cout << "Waiting Resquest" << std::endl;
     int ret = ::poll((pollfd *)&pollFds[0], pollFds.size(), -1);
 	if (ret == -1)
-        throw SocketException("poll");
+        throw SocketException("poll exception");
 }
 
 void SocketServer::listen()

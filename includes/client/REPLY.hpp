@@ -10,7 +10,7 @@
 #define JOIN_MESSAGE(nick, userName, userIP, channel) ":" + nick + "!" + userName + "@" + userIP + " JOIN " + channel
 #define PART_MESSAGE(nick, userName, userIP, channel) ":" + nick + "!" + userName + "@" + userIP + " PART " + channel
 
-#define ERR_NOSUCHNICK(nick) "401 " nick " :No such nick/channel"
+#define ERR_NOSUCHNICK(nick) "401 " + nick + " :No such nick/channel"
 #define ERR_BADCARCHAN(chan) "432 JOIN " + chan + " :Bad characters"
 #define ERR_NOSUCHCHANNEL(channel) "403 " + channel + " :No such channel"
 #define ERR_NOTONCHANNEL(channel) "442 " + channel + " :You're not on that channel"

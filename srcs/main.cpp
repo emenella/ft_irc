@@ -6,12 +6,13 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 18:25:38 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/08 16:11:38 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/13 18:36:35 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc/Server.hpp"
 #include <cstdlib>
+
 
 int main(int ac, char **av)
 {
@@ -39,6 +40,3 @@ int main(int ac, char **av)
     }
     return 0;
 }
-
-
-

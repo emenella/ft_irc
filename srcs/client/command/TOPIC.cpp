@@ -28,23 +28,62 @@ TOPIC::~TOPIC()
 
 }
 
+std::string TOPIC::unparseArg(args_t::iterator begin, args_t::iterator end) const
+{
+	std::string topic;
+
+	for (args_t::iterator it = begin; it != end; it++)
+        topic += *it + " ";
+    topic.pop_back();
+	topic.erase(0, 1);
+	return topic;
+}
+
 int TOPIC::execute(Client &clicli, args_t::iterator begin, args_t::iterator end)
 {
     int ret = AuthenticationCommand::execute(clicli, begin, end);
     if (ret == 1)
 	{
-		// begin++;
-		// if (begin == end)
-		// {
-		// 	clicli << ERR_NEEDMOREPARAMS("TOPIC");
-		// 	return 0;
-		// }
-		// if (begin + 1 == end)
-		// {
-
-		// }
-		// while (begin != end)
-		// 	begin++;
+		begin++;
+		if (begin == end)
+		{
+			clicli << ERR_NEEDMOREPARAMS("TOPIC");
+			return 0;
+		}
+		if (begin + 1 == end)
+		{
+			if (_serv->getChannelMap().find(*begin) != _serv->getChannelMap().end())
+			{
+				if (_serv->getChannelMap().find(*begin)->second->isClient(&clicli))
+				{
+					if (!_serv->getChannelMap().find(*begin)->second->getTopic().empty())
+						clicli << RPL_TOPIC(clicli.getNickname(), *begin, _serv->getChannelMap().find(*begin)->second->getTopic());
+					else
+						clicli << RPL_NOTOPIC(clicli.getNickname(), *begin);
+				}
+				else
+					clicli << ERR_NOTONCHANNEL(*begin);
+			}
+			else
+				clicli << ERR_NOSUCHCHANNEL(*begin);
+		}
+		else
+		{
+			if (_serv->getChannelMap().find(*begin) != _serv->getChannelMap().end())
+			{
+				if (_serv->getChannelMap().find(*begin)->second->isClient(&clicli))
+				{
+					if (_serv->getChannelMap().find(*begin)->second->isOp(&clicli))
+						_serv->getChannelMap().find(*begin)->second->setTopic(unparseArg(begin + 1, end));
+					else
+						clicli << ERR_CHANOPRIVSNEEDED(clicli.getNickname(), *begin);
+				}
+				else
+					clicli << ERR_NOTONCHANNEL(*begin);
+			}
+			else
+				clicli << ERR_NOSUCHCHANNEL(*begin);
+		}
 	}
 	else
         clicli << ERR_NOTREGISTERED;

@@ -21,5 +21,6 @@ class TOPIC : public AuthenticationCommand
         TOPIC(Server *serv);
         TOPIC(TOPIC const& src);
         ~TOPIC();
+		std::string	unparseArg(args_t::iterator begin, args_t::iterator end) const;
         int execute(Client &clicli, args_t::iterator begin, args_t::iterator end);
 };

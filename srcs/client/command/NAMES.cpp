@@ -34,7 +34,6 @@ int NAMES::execute(Client &clicli, args_t::iterator begin, args_t::iterator end)
     if (ret == 1)
 		while (++begin != end)
 		{
-			std::cout << " begin : "<< *begin << std::endl;
 			size_t i = 0;
 			size_t pos;
 			std::vector<std::string> chanVec;
@@ -52,13 +51,11 @@ int NAMES::execute(Client &clicli, args_t::iterator begin, args_t::iterator end)
 			{
 				if (_serv->getChannelMap().find(*chan) != _serv->getChannelMap().end())
 				{
-					_serv->debugChannel();
 					clicli << RPL_NAMREPLY(clicli.getNickname(), *chan, _serv->getChannelMap().find(*chan)->second->listClients());
 					clicli << RPL_ENDOFNAMES(clicli.getNickname(), *chan);
 				}
 				else
 					clicli << RPL_ENDOFNAMES(clicli.getNickname(), *chan);
-				std::cout << *chan << std::endl;
 				chan++;
 				
 			}

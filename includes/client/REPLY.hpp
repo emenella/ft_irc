@@ -3,6 +3,7 @@
 #define RPL_WELCOME(nick, user, host) "001 " + nick + " :Welcome to the Internet Relay Network " + nick + "!" + user + "@" + host
 #define RPL_AWAY(sender, msg) "301 " + sender + " :" + msg
 #define RPL_TOPIC(client, channel, topic) "332 " + client + " " + channel + " :" + topic
+#define RPL_NOTOPIC(client, channel) "331 " + client + " " + channel + " :No topic is set"
 #define RPL_NAMREPLY(nick, channel, listUsers) "353 " + nick + " = " + channel + " :" + listUsers
 #define RPL_ENDOFNAMES(nick, channel) "366 " + nick + " " + channel + " :End of NAMES list"
 
@@ -23,3 +24,4 @@
 #define ERR_NOTREGISTERED "451 :You have not registered"
 #define ERR_NEEDMOREPARAMS(command) "461 " command " :Not enough parameters"
 #define ERR_ALREADYREGISTRED "462 :You have already registered"
+#define ERR_CHANOPRIVSNEEDED(nick, chan) "482 " + nick + " " + chan + " :You're not channel operator"

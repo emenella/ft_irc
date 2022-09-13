@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 21:32:08 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/13 17:36:28 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/13 18:19:47 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ class Channel
 		void							addOp(Client & op);
 		void							removeOp(Client & op);
 		bool							isOp(Client * clicli) const;
+		bool							isClient(Client * clicli) const;
 		std::string						listClients() const;
 		bool							isEmpty() const;
 		void							message(Client &client, std::string msg);

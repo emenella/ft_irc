@@ -6,7 +6,7 @@
 /*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:53:39 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/13 17:51:41 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/13 19:20:35 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,15 @@ std::string	const				Channel::getTopic() const
 void							Channel::setTopic(std::string topic)
 {
 	this->_topic = topic;
+	std::vector<Client *>::const_iterator it = this->clientListBegin();
+	while (it != this->clientListEnd())
+	{
+		if (!_topic.empty())
+			*(*it) << RPL_TOPIC((*it)->getNickname(), this->_name, this->_topic);
+		else
+			*(*it) << RPL_NOTOPIC((*it)->getNickname(), this->_name);
+		it++;
+	}
 }
 
 std::vector<Client *>::const_iterator Channel::clientListBegin() const
@@ -83,6 +92,18 @@ bool							Channel::isOp(Client * clicli) const
 		if ((*op) == clicli)
 			return true;
 		op++;
+	}
+	return false;
+}
+
+bool							Channel::isClient(Client * clicli) const
+{
+	std::vector<Client *>::const_iterator client = this->clientListBegin();
+	while (client != this->clientListEnd())
+	{
+		if ((*client) == clicli)
+			return true;
+		client++;
 	}
 	return false;
 }
@@ -120,8 +141,10 @@ void							Channel::addClient(Client& client)
 		*(*it) << JOIN_MESSAGE(client.getNickname(), client.getUsername(), client.getAddr(), this->getName());
 		it++;
 	}
-	client << RPL_NAMREPLY(client.getNickname(), this->getName(), this->listClients());
-	client << RPL_ENDOFNAMES(client.getNickname(), this->getName());
+	if (!this->_topic.empty())
+		client << RPL_TOPIC(client.getNickname(), this->_name, this->_topic);
+	client << RPL_NAMREPLY(client.getNickname(), this->_name, this->listClients());
+	client << RPL_ENDOFNAMES(client.getNickname(), this->_name);
 }
 
 void							Channel::removeClient(Client& client)

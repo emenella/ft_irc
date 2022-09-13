@@ -6,7 +6,7 @@
 /*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:38:35 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/08 16:46:06 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/08 18:00:10 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include "client/command/USER.hpp"
 #include "client/command/JOIN.hpp"
 #include "client/command/PING.hpp"
+#include "client/command/PART.hpp"
 
 class Server: public SocketServer
 {
@@ -47,6 +48,7 @@ class Server: public SocketServer
 		void 			parseCommand(std::string const &message, Client& client);
 		int 			joinChannel(std::string const &name, Client& client);
 		void 			leaveChannel(Client& client);
+		void 			partChannel(std::string chan, Client& client);
 		void			debugChannel() const;
 		ConnectionMap::const_iterator begin() const;
 		ConnectionMap::const_iterator end() const;

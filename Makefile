@@ -6,7 +6,7 @@
 #    By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/14 11:09:51 by bmangin           #+#    #+#              #
-#    Updated: 2022/09/08 18:45:00 by ebellon          ###   ########lyon.fr    #
+#    Updated: 2022/09/13 17:34:46 by ebellon          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ NAME := ircserv
 FILES_IRC			:= Server Channel
 FILES_SOCK			:= Socket SocketConnection SocketListener SocketServer
 FILES_USER			:= Client ACommand AuthenticationCommand
-FILES_COMMAND		:= NICK PASS JOIN USER PING PART
+FILES_COMMAND		:= NICK PASS JOIN USER PING PART NAMES TOPIC
 
 FILES				= ${addprefix ${PATH_IRC}/, ${FILES_IRC}} \
 					${addprefix ${PATH_SOCK}/, ${FILES_SOCK}} \

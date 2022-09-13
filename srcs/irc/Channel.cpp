@@ -6,7 +6,7 @@
 /*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:53:39 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/08 18:41:37 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/13 17:33:01 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,11 @@ std::string	const				Channel::getMods() const
 std::string	const				Channel::getTopic() const
 {
 	return this->_topic;
+}
+
+void							Channel::setTopic(std::string topic)
+{
+	this->_topic = topic;
 }
 
 std::vector<Client *>::const_iterator Channel::clientListBegin() const

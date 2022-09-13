@@ -6,7 +6,7 @@
 /*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:44:27 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/08 18:55:56 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/13 17:34:36 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ Server::Server(int port, std::string password, std::string hostname, bool verbos
 	_commandes.insert(std::pair<std::string, ACommand*>("JOIN", new JOIN(this)));
 	_commandes.insert(std::pair<std::string, ACommand*>("PING", new PING(this)));
 	_commandes.insert(std::pair<std::string, ACommand*>("PART", new PART(this)));
+	_commandes.insert(std::pair<std::string, ACommand*>("NAMES", new NAMES(this)));
+	_commandes.insert(std::pair<std::string, ACommand*>("TOPIC", new TOPIC(this)));
 }
 
 Server::~Server() throw()
@@ -114,6 +116,11 @@ void Server::parseCommand(std::string const &message, Client& client)
 	}
 }
 
+Server::ChannelMap	const & Server::getChannelMap() const
+{
+	return _channels;
+}
+
 int Server::joinChannel(std::string const &name, Client& client)
 {
 	// TO DO : test mods and acces before adding clicli
@@ -124,7 +131,7 @@ int Server::joinChannel(std::string const &name, Client& client)
 	}
 	else
 	{
-		if (name.find("{") != std::string::npos || name.find("[") != std::string::npos || name.find("|") != std::string::npos ||
+		if (name[0] != '#' || name.find("{") != std::string::npos || name.find("[") != std::string::npos || name.find("|") != std::string::npos ||
 			name.find("}") != std::string::npos || name.find("]") != std::string::npos || name.find("/") != std::string::npos)
 		{
 			client << ERR_BADCARCHAN(name);

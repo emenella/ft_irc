@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:53:39 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/08 18:41:37 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/13 17:36:23 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,14 +174,18 @@ bool							Channel::isEmpty() const
 	return this->_clientList.empty();
 }
 
-std::ostream&                       operator<<(std::ostream& o, Channel const& rhs)
+void							Channel::message(Client &client, std::string msg)
 {
-	o << "Channel [" << rhs.getName() << "]:" << std::endl;
-	int	i = 0;
-	for (std::vector<Client *>::const_iterator it = rhs.clientListBegin(); it != rhs.clientListEnd(); ++it)
-	{
-		o << "\t" << (*it)->getNickname() << "(" << i << ")"<< std::endl;
-		i++;
-	}
-	return o;
+	clientList::const_iterator end = this->clientListEnd();
+	for (clientList::const_iterator it = this->clientListBegin(); it != end; it++)
+		if (&**it != &client)
+			**it << msg;
+}
+
+Channel &Channel::operator<<(std::string const &reply)
+{
+	clientList::const_iterator end = this->clientListEnd();
+	for (clientList::const_iterator it = this->clientListBegin(); it != end; it++)
+		*(*it) << reply;
+	return *this;
 }

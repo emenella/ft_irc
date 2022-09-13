@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 15:07:06 by bmangin           #+#    #+#             */
-/*   Updated: 2022/05/17 17:08:44 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/13 14:50:23 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,8 @@ NICK::~NICK()
 
 int NICK::unique_nick(std::string nick)
 {
-	for (Server::ConnectionMap::const_iterator it = _serv->begin(); it != _serv->end(); it++)
-	{
-	Client* curr = static_cast<Client*>(it->second);
-		if (curr->getNickname() == nick)
-			return (0);
-	}
+	if (_serv->findClient(nick) != NULL)
+		return (0);
 	return (1);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:44:27 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/08 18:55:56 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/13 14:46:32 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ Server::Server(int port, std::string password, std::string hostname, bool verbos
 	_commandes.insert(std::pair<std::string, ACommand*>("JOIN", new JOIN(this)));
 	_commandes.insert(std::pair<std::string, ACommand*>("PING", new PING(this)));
 	_commandes.insert(std::pair<std::string, ACommand*>("PART", new PART(this)));
+	_commandes.insert(std::pair<std::string, ACommand*>("PRIVMSG", new PRIVMSG(this)));
 }
 
 Server::~Server() throw()
@@ -165,13 +166,22 @@ void Server::partChannel(std::string chan, Client& client)
 		client << ERR_NOSUCHCHANNEL(chan);
 }
 
-
-std::map<int, SocketConnection*>::const_iterator Server::begin() const
+Channel* Server::findChannel(std::string name)
 {
-	return fdConnectionMap.begin();
+	ChannelMap::iterator it = _channels.find(name);
+	if (it != _channels.end())
+		return it->second;
+	return NULL;
 }
 
-std::map<int, SocketConnection*>::const_iterator Server::end() const
+Client* Server::findClient(std::string name)
 {
-	return fdConnectionMap.end();
+	ConnectionMap::iterator end = fdConnectionMap.end();
+	for (ConnectionMap::iterator it = fdConnectionMap.begin(); it != end; it++)
+	{
+		Client *client = static_cast<Client*>(it->second);
+		if (client->getNickname() == name)
+			return client;
+	}
+	return NULL;
 }

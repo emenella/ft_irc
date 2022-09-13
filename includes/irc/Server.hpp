@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:38:35 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/08 18:00:10 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/13 14:35:48 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 #include "client/command/JOIN.hpp"
 #include "client/command/PING.hpp"
 #include "client/command/PART.hpp"
+#include "client/command/PRIVMSG.hpp"
 
 class Server: public SocketServer
 {
@@ -50,6 +51,7 @@ class Server: public SocketServer
 		void 			leaveChannel(Client& client);
 		void 			partChannel(std::string chan, Client& client);
 		void			debugChannel() const;
-		ConnectionMap::const_iterator begin() const;
-		ConnectionMap::const_iterator end() const;
+
+		Channel* findChannel(std::string name);
+        Client* findClient(std::string name);
 };

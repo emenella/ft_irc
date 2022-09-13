@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 21:32:08 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/08 16:21:56 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/13 17:36:28 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,6 @@ class Channel
 		bool							isOp(Client * clicli) const;
 		std::string						listClients() const;
 		bool							isEmpty() const;
+		void							message(Client &client, std::string msg);
+		Channel&						operator<<(std::string const &reply);
 };
-
-std::ostream&                       operator<<(std::ostream& o, Channel const& rhs);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JOIN.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:27:51 by emenella          #+#    #+#             */
-/*   Updated: 2022/09/13 11:31:23 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/13 16:19:15 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int JOIN::execute(Client &clicli, args_t::iterator begin, args_t::iterator end)
 {
     int ret = AuthenticationCommand::execute(clicli, begin, end);
     if (ret == 1)
-		while (begin++ != end)
+		while (++begin != end)
 			_serv->joinChannel(*begin, clicli);
 	else
         clicli << ERR_NOTREGISTERED;

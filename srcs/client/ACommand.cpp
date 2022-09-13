@@ -14,21 +14,8 @@
 
 ACommand::ACommand(Server *serv) : _serv(serv)
 {
-	// this->execute();
 }
-	// try
-	// {
-	// 	_client = dynamic_cast<Client&>(clicli);
-	// }
-	// catch (std::bad_cast &e)
-	// {
-	// 	std::cerr << "ACommand::ACommand(Server *serv, SocketConnection & clicli, std::string msg) : _msg(msg), _serv(serv) : " << e.what() << std::endl;
-	// }
-// {
-    // #ifdef DEBUG
-        // std::cout << "Default Constructeur Called" << std::endl;
-    // #endif
-// }
+
 ACommand::ACommand(ACommand const& src)  : _serv(src._serv)
 {
     #ifdef DEBUG

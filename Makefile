@@ -6,7 +6,7 @@
 #    By: emenella <emenella@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/14 11:09:51 by bmangin           #+#    #+#              #
-#    Updated: 2022/09/07 19:21:07 by emenella         ###   ########.fr        #
+#    Updated: 2022/09/13 11:00:11 by emenella         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ NAME := ircserv
 FILES_IRC			:= Server Channel
 FILES_SOCK			:= Socket SocketConnection SocketListener SocketServer
 FILES_USER			:= Client ACommand AuthenticationCommand
-FILES_COMMAND		:= NICK PASS JOIN USER PING
+FILES_COMMAND		:= NICK PASS JOIN USER PING PRIVMSG
 
 FILES				= ${addprefix ${PATH_IRC}/, ${FILES_IRC}} \
 					${addprefix ${PATH_SOCK}/, ${FILES_SOCK}} \

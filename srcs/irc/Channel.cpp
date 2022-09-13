@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:53:39 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/13 17:36:23 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/13 17:51:41 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,11 @@ std::string	const				Channel::getMods() const
 std::string	const				Channel::getTopic() const
 {
 	return this->_topic;
+}
+
+void							Channel::setTopic(std::string topic)
+{
+	this->_topic = topic;
 }
 
 std::vector<Client *>::const_iterator Channel::clientListBegin() const

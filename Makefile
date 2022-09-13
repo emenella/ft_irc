@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: emenella <emenella@student.42.fr>          +#+  +:+       +#+         #
+#    By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/14 11:09:51 by bmangin           #+#    #+#              #
-#    Updated: 2022/09/13 13:44:28 by emenella         ###   ########.fr        #
+#    Updated: 2022/09/13 17:53:44 by ebellon          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ NAME := ircserv
 FILES_IRC			:= Server Channel
 FILES_SOCK			:= Socket SocketConnection SocketListener SocketServer
 FILES_USER			:= Client ACommand AuthenticationCommand
-FILES_COMMAND		:= NICK PASS JOIN USER PING PART PRIVMSG
+FILES_COMMAND		:= NICK PASS JOIN USER PING PART NAMES TOPIC PRIVMSG
 
 FILES				= ${addprefix ${PATH_IRC}/, ${FILES_IRC}} \
 					${addprefix ${PATH_SOCK}/, ${FILES_SOCK}} \

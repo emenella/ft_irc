@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:38:35 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/13 14:35:48 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/13 17:54:00 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 #include "client/command/PING.hpp"
 #include "client/command/PART.hpp"
 #include "client/command/PRIVMSG.hpp"
+#include "client/command/NAMES.hpp"
+#include "client/command/TOPIC.hpp"
 
 class Server: public SocketServer
 {
@@ -39,6 +41,7 @@ class Server: public SocketServer
 		~Server() throw();
 
 		std::string 	getPassword() const;
+		ChannelMap const &	getChannelMap() const;
 
 		void			setPassword(std::string password);
 

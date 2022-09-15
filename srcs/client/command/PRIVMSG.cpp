@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PRIVMSG.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 11:04:28 by emenella          #+#    #+#             */
-/*   Updated: 2022/09/13 18:24:00 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/14 15:48:06 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,16 @@ int PRIVMSG::execute(Client &clicli, args_t::iterator begin, args_t::iterator en
                 if ((*it)[0] == '#')
                 {
                     Channel* channel = _serv->findChannel(*it);
-                    if (channel != NULL)
-                        channel->message(clicli, PRIVMSG_MESSAGE(clicli.getNickname(), channel->getName(), msg));
-                    else
-                        clicli << ERR_NOSUCHCHANNEL(*it);
-                }
+					if (channel != NULL)
+					{
+						if (channel->isClient(&clicli))
+							channel->message(clicli, PRIVMSG_MESSAGE(clicli.getNickname(), channel->getName(), msg));
+						else
+							clicli << ERR_NOTONCHANNEL(*it);
+					}
+					else
+						clicli << ERR_NOSUCHCHANNEL(clicli.getNickname(), *it);
+				}
                 else
                 {
                     Client* client = _serv->findClient(*it);

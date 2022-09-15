@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:38:35 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/13 18:36:58 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/15 18:50:31 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,10 @@
 #include "client/command/PRIVMSG.hpp"
 #include "client/command/NAMES.hpp"
 #include "client/command/TOPIC.hpp"
+#include "client/command/LIST.hpp"
+#include "client/command/QUIT.hpp"
+#include "client/command/MODE.hpp"
+#include "client/command/INVITE.hpp"
 
 class Server: public SocketServer
 {
@@ -52,7 +56,7 @@ class Server: public SocketServer
 
 		void 			parseCommand(std::string const &message, Client& client);
 		int 			joinChannel(std::string const &name, Client& client);
-		void 			leaveChannel(Client& client);
+		void 			eraseEmptyChan();
 		void 			partChannel(std::string chan, Client& client);
 		void			debugChannel() const;
 

@@ -1,43 +1,51 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   PART.cpp                                           :+:      :+:    :+:   */
+/*   QUIT.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:27:51 by emenella          #+#    #+#             */
-/*   Updated: 2022/09/15 15:34:08 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/15 17:03:10 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "client/command/PART.hpp"
+#include "client/command/QUIT.hpp"
 #include "irc/Server.hpp"
 
-PART::PART(Server *serv): AuthenticationCommand(serv)
+QUIT::QUIT(Server *serv): AuthenticationCommand(serv)
 {
 
 }
 
-PART::PART(PART const& src): AuthenticationCommand(src)
+QUIT::QUIT(QUIT const& src): AuthenticationCommand(src)
 {
 
 }
 
-PART::~PART()
+QUIT::~QUIT()
 {
 
 }
 
-int PART::execute(Client &clicli, args_t::iterator begin, args_t::iterator end)
+int QUIT::execute(Client &clicli, args_t::iterator begin, args_t::iterator end)
 {
     int ret = AuthenticationCommand::execute(clicli, begin, end);
     if (ret == 1)
-		while (++begin != end)
+	{
+		std::map<std::string, Channel *>::const_iterator chan = _serv->getChannelMap().begin();
+		std::map<std::string, Channel *>::const_iterator end = _serv->getChannelMap().end();
+		while (chan != end)
 		{
-			if ((*begin)[0] == ':')
-				break ;
-			_serv->partChannel(*begin, clicli);
+			if (chan->second->isClient(&clicli))
+			{
+				chan->second->removeClient(clicli);
+				chan->second->removeOp(clicli);
+			}
+			chan++;
 		}
+		_serv->eraseEmptyChan();
+	}
 	else
         clicli << ERR_NOTREGISTERED;
     return 0;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:44:27 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/13 18:48:56 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/15 19:25:44 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,10 @@ Server::Server(int port, std::string password, std::string hostname, bool verbos
 	_commandes.insert(std::pair<std::string, ACommand*>("PRIVMSG", new PRIVMSG(this)));
 	_commandes.insert(std::pair<std::string, ACommand*>("NAMES", new NAMES(this)));
 	_commandes.insert(std::pair<std::string, ACommand*>("TOPIC", new TOPIC(this)));
+	_commandes.insert(std::pair<std::string, ACommand*>("LIST", new LIST(this)));
+	_commandes.insert(std::pair<std::string, ACommand*>("QUIT", new QUIT(this)));
+	_commandes.insert(std::pair<std::string, ACommand*>("MODE", new MODE(this)));
+	_commandes.insert(std::pair<std::string, ACommand*>("INVITE", new INVITE(this)));
 }
 
 Server::~Server() throw()
@@ -59,7 +63,6 @@ void Server::onConnection(int connectionFd, sockaddr_in& address)
 void Server::onDisconnection(Connection& connection)
 {
 	Client &client = static_cast<Client&>(connection);
-	leaveChannel(client);
 	SocketServer::onDisconnection(connection);
 	std::cout << "Disconnection IRC of " << client << std::endl;
 	fdConnectionMap.erase(connection.getSock());
@@ -126,10 +129,18 @@ Server::ChannelMap	const & Server::getChannelMap() const
 
 int Server::joinChannel(std::string const &name, Client& client)
 {
-	// TO DO : test mods and acces before adding clicli
 	if (_channels.find(name) != _channels.end())
 	{
+		// TO DO : test mods and acces before adding clicli
+		std::cout << "invit ? = " << (!_channels.at(name)->isInvit(&client)) << std::endl;
+		if (!_channels.at(name)->getMods().empty() && !_channels.at(name)->isInvit(&client))
+		{
+			client << ERR_INVITEONLYCHAN(client.getNickname(), name);
+			return 0;
+		}
 		_channels.at(name)->addClient(client);
+		if (_channels.at(name)->isInvit(&client))
+			_channels.at(name)->removeInvit(client);
 		return 1;
 	}
 	else
@@ -139,19 +150,18 @@ int Server::joinChannel(std::string const &name, Client& client)
 		{
 			client << ERR_BADCARCHAN(name);
 			return 0;
-		}_channels.insert(std::pair<std::string, Channel *>(name, new Channel(name, client)));
+		}
+		_channels.insert(std::pair<std::string, Channel *>(name, new Channel(name, client)));
 		return 1;
 	}
 }
 
-void Server::leaveChannel(Client& client)
+void Server::eraseEmptyChan()
 {
 	std::map<std::string, Channel*>::const_iterator chan = this->_channels.begin();
 	std::vector<std::string> empty_chan;
 	while (chan != this->_channels.end())
 	{
-		chan->second->removeClient(client);
-		chan->second->removeOp(client);
 		if (chan->second->isEmpty())
 			empty_chan.push_back(chan->second->getName());
 		chan++;
@@ -172,7 +182,8 @@ void Server::partChannel(std::string chan, Client& client)
 		_channels.at(chan)->removeOp(client);
 	}
 	else
-		client << ERR_NOSUCHCHANNEL(chan);
+		client << ERR_NOSUCHCHANNEL(client.getNickname(), chan);
+	eraseEmptyChan();
 }
 
 Channel* Server::findChannel(std::string name)

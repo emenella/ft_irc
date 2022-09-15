@@ -6,7 +6,7 @@
 /*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:53:39 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/13 19:20:35 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/15 19:33:57 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,11 @@ std::string	const				Channel::getTopic() const
 	return this->_topic;
 }
 
+size_t							Channel::getNbClients() const
+{
+	return std::distance(this->clientListBegin(), this->clientListEnd());
+}
+
 void							Channel::setTopic(std::string topic)
 {
 	this->_topic = topic;
@@ -61,6 +66,44 @@ void							Channel::setTopic(std::string topic)
 		else
 			*(*it) << RPL_NOTOPIC((*it)->getNickname(), this->_name);
 		it++;
+	}
+}
+
+void							Channel::setMods(std::string mods, Client & clicli)
+{
+	if (!isOp(&clicli))
+	{
+		clicli << ERR_CHANOPRIVSNEEDED(clicli.getNickname(), this->_name);
+		return ;
+	}
+	if (!(mods[0] == '+' || mods[0] == '-') || mods[1] != 'i')
+		return ;
+	switch (mods[0])
+	{
+		case '+':
+			if (_mods.empty())
+			{
+				this->_mods = mods;
+				std::vector<Client *>::const_iterator it = this->clientListBegin();
+				while (it != this->clientListEnd())
+				{
+					*(*it) << MODE_MESSAGE(clicli.getNickname(), clicli.getUsername(), clicli.getAddr(), this->getName(), mods);
+					it++;
+				}
+				return ;
+			}
+		case '-':
+			if (!_mods.empty())
+			{
+				this->_mods.clear();
+				std::vector<Client *>::const_iterator it = this->clientListBegin();
+				while (it != this->clientListEnd())
+				{
+					*(*it) << MODE_MESSAGE(clicli.getNickname(), clicli.getUsername(), clicli.getAddr(), this->getName(), mods);
+					it++;
+				}
+				return ;
+			}
 	}
 }
 
@@ -100,6 +143,18 @@ bool							Channel::isClient(Client * clicli) const
 {
 	std::vector<Client *>::const_iterator client = this->clientListBegin();
 	while (client != this->clientListEnd())
+	{
+		if ((*client) == clicli)
+			return true;
+		client++;
+	}
+	return false;
+}
+
+bool							Channel::isInvit(Client * clicli) const
+{
+	std::vector<Client *>::const_iterator client = this->_invitList.begin();
+	while (client != this->_invitList.end())
 	{
 		if ((*client) == clicli)
 			return true;
@@ -169,6 +224,34 @@ void							Channel::removeClient(Client& client)
 	client << ERR_NOTONCHANNEL(this->getName());
 }
 
+void							Channel::addInvit(Client & invit)
+{
+	std::vector<Client *>::const_iterator it;
+	it = this->_invitList.begin();
+	while (it != this->_invitList.end())
+	{
+		if ((*it)->getSock() == invit.getSock())
+			return ;
+		it++;
+	}
+	this->_invitList.push_back(&invit);
+}
+
+void							Channel::removeInvit(Client & invit)
+{
+	std::vector<Client *>::const_iterator it;
+	it = this->_invitList.begin();
+	while (it != this->_invitList.end())
+	{
+		if ((*it)->getSock() == invit.getSock())
+		{
+			this->_invitList.erase(it);
+			break ;
+		}
+		it++;
+	}
+}
+
 void							Channel::addOp(Client& op)
 {
 	std::vector<Client *>::const_iterator it;
@@ -191,10 +274,12 @@ void							Channel::removeOp(Client& op)
 		if ((*it)->getSock() == op.getSock())
 		{
 			this->_opList.erase(it);
-			return ;
+			break ;
 		}
 		it++;
 	}
+	if (this->_opList.empty() && !this->_clientList.empty())
+		addOp(*this->_clientList[0]);
 }
 
 bool							Channel::isEmpty() const

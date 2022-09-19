@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:44:27 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/13 18:48:56 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/14 18:00:35 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ Server::Server(int port, std::string password, std::string hostname, bool verbos
 	_commandes.insert(std::pair<std::string, ACommand*>("PING", new PING(this)));
 	_commandes.insert(std::pair<std::string, ACommand*>("PART", new PART(this)));
 	_commandes.insert(std::pair<std::string, ACommand*>("PRIVMSG", new PRIVMSG(this)));
+	_commandes.insert(std::pair<std::string, ACommand*>("NOTICE", new NOTICE(this)));
+	_commandes.insert(std::pair<std::string, ACommand*>("KICK", new KICK(this)));
 	_commandes.insert(std::pair<std::string, ACommand*>("NAMES", new NAMES(this)));
 	_commandes.insert(std::pair<std::string, ACommand*>("TOPIC", new TOPIC(this)));
 }

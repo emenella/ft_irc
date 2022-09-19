@@ -8,6 +8,7 @@
 #define RPL_ENDOFNAMES(nick, channel) "366 " + nick + " " + channel + " :End of NAMES list"
 
 #define PRIVMSG_MESSAGE(sender, receiver, message) ":" + sender + " PRIVMSG " + receiver + " :" + message
+#define NOTICE_MESSAGE(sender, receiver, message) ":" + sender + " NOTICE " + receiver + " :" + message
 #define JOIN_MESSAGE(nick, userName, userIP, channel) ":" + nick + "!" + userName + "@" + userIP + " JOIN " + channel
 #define PART_MESSAGE(nick, userName, userIP, channel) ":" + nick + "!" + userName + "@" + userIP + " PART " + channel
 

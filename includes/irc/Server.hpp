@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:38:35 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/13 18:36:58 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/14 18:00:46 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,10 @@
 #include "client/command/PING.hpp"
 #include "client/command/PART.hpp"
 #include "client/command/PRIVMSG.hpp"
+#include "client/command/NOTICE.hpp"
 #include "client/command/NAMES.hpp"
 #include "client/command/TOPIC.hpp"
+#include "client/command/KICK.hpp"
 
 class Server: public SocketServer
 {

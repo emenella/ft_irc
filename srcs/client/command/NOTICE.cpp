@@ -47,15 +47,15 @@ int NOTICE::execute(Client &clicli, args_t::iterator begin, args_t::iterator end
                 {
                     Channel* channel = _serv->findChannel(*it);
                     if (channel != NULL)
-                        channel->message(clicli, NOTICE_MESSAGE(clicli.getNickname(), channel->getName(), msg));
+                        channel->message(clicli, NOTICE_MESSAGE(clicli.getNickname(), clicli.getUsername(), clicli.getAddr(), channel->getName(), msg));
                     else
-                        clicli << ERR_NOSUCHCHANNEL(*it);
+                        clicli << ERR_NOSUCHCHANNEL(clicli.getNickname(), *it);
                 }
                 else
                 {
                     Client* client = _serv->findClient(*it);
                     if (client != NULL)
-                        *client << NOTICE_MESSAGE(clicli.getNickname(), client->getNickname(), msg);
+                        *client << NOTICE_MESSAGE(clicli.getNickname(), clicli.getUsername(), clicli.getAddr(), client->getNickname(), msg);
                     else
                         clicli << ERR_NOSUCHNICK(*it);
                 }

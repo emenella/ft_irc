@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:38:35 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/14 18:00:46 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/19 18:53:30 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,10 @@
 #include "client/command/NAMES.hpp"
 #include "client/command/TOPIC.hpp"
 #include "client/command/KICK.hpp"
+#include "client/command/LIST.hpp"
+#include "client/command/QUIT.hpp"
+#include "client/command/MODE.hpp"
+#include "client/command/INVITE.hpp"
 
 class Server: public SocketServer
 {
@@ -54,9 +58,8 @@ class Server: public SocketServer
 
 		void 			parseCommand(std::string const &message, Client& client);
 		int 			joinChannel(std::string const &name, Client& client);
-		void 			leaveChannel(Client& client);
+		void 			eraseEmptyChan();
 		void 			partChannel(std::string chan, Client& client);
-		void			debugChannel() const;
 
 		Channel* findChannel(std::string name);
         Client* findClient(std::string name);

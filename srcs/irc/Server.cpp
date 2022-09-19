@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:44:27 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/14 18:00:35 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/19 18:53:35 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,10 @@ Server::Server(int port, std::string password, std::string hostname, bool verbos
 	_commandes.insert(std::pair<std::string, ACommand*>("KICK", new KICK(this)));
 	_commandes.insert(std::pair<std::string, ACommand*>("NAMES", new NAMES(this)));
 	_commandes.insert(std::pair<std::string, ACommand*>("TOPIC", new TOPIC(this)));
+	_commandes.insert(std::pair<std::string, ACommand*>("LIST", new LIST(this)));
+	_commandes.insert(std::pair<std::string, ACommand*>("QUIT", new QUIT(this)));
+	_commandes.insert(std::pair<std::string, ACommand*>("MODE", new MODE(this)));
+	_commandes.insert(std::pair<std::string, ACommand*>("INVITE", new INVITE(this)));
 }
 
 Server::~Server() throw()
@@ -36,6 +40,10 @@ Server::~Server() throw()
 		delete it->second;
 	}
 	for (CommandMap::iterator it = _commandes.begin(); it != _commandes.end(); ++it)
+	{
+		delete it->second;
+	}
+	for (ChannelMap::iterator it = _channels.begin(); it != _channels.end(); ++it)
 	{
 		delete it->second;
 	}
@@ -61,7 +69,6 @@ void Server::onConnection(int connectionFd, sockaddr_in& address)
 void Server::onDisconnection(Connection& connection)
 {
 	Client &client = static_cast<Client&>(connection);
-	leaveChannel(client);
 	SocketServer::onDisconnection(connection);
 	std::cout << "Disconnection IRC of " << client << std::endl;
 	fdConnectionMap.erase(connection.getSock());
@@ -73,32 +80,6 @@ void Server::onMessage(Connection& connection, std::string const& message)
 	Client &client = static_cast<Client&>(connection);
 	std::cout << "Message from " << client << ": " << message << std::endl;
 	parseCommand(message, client);
-}
-
-void Server::debugChannel() const
-{
-	ChannelMap::const_iterator it = this->_channels.begin();
-	while (it != this->_channels.end())
-	{
-		Channel * chan = it->second;
-		std::cout << "chan [" << chan->getName() << "]" << std::endl;
-		std::cout << "chan mods : " << chan->getMods() << std::endl;
-		std::cout << "clients connected :" << std::endl;
-		std::vector<Client *>::const_iterator it_chan = chan->clientListBegin();
-		while (it_chan != chan->clientListEnd())
-		{
-			std::cout << "	" <<(*it_chan)->getNickname() << std::endl;
-			it_chan++;
-		}
-		std::cout << "operators :" << std::endl;
-		it_chan = chan->opListBegin();
-		while (it_chan != chan->opListEnd())
-		{
-			std::cout << "	" <<(*it_chan)->getNickname() << std::endl;
-			it_chan++;
-		}
-		it++;
-	}
 }
 
 void Server::parseCommand(std::string const &message, Client& client)
@@ -128,10 +109,16 @@ Server::ChannelMap	const & Server::getChannelMap() const
 
 int Server::joinChannel(std::string const &name, Client& client)
 {
-	// TO DO : test mods and acces before adding clicli
 	if (_channels.find(name) != _channels.end())
 	{
+		if (!_channels.at(name)->getMods().empty() && !_channels.at(name)->isInvit(&client))
+		{
+			client << ERR_INVITEONLYCHAN(client.getNickname(), name);
+			return 0;
+		}
 		_channels.at(name)->addClient(client);
+		if (_channels.at(name)->isInvit(&client))
+			_channels.at(name)->removeInvit(client);
 		return 1;
 	}
 	else
@@ -141,19 +128,18 @@ int Server::joinChannel(std::string const &name, Client& client)
 		{
 			client << ERR_BADCARCHAN(name);
 			return 0;
-		}_channels.insert(std::pair<std::string, Channel *>(name, new Channel(name, client)));
+		}
+		_channels.insert(std::pair<std::string, Channel *>(name, new Channel(name, client)));
 		return 1;
 	}
 }
 
-void Server::leaveChannel(Client& client)
+void Server::eraseEmptyChan()
 {
 	std::map<std::string, Channel*>::const_iterator chan = this->_channels.begin();
 	std::vector<std::string> empty_chan;
 	while (chan != this->_channels.end())
 	{
-		chan->second->removeClient(client);
-		chan->second->removeOp(client);
 		if (chan->second->isEmpty())
 			empty_chan.push_back(chan->second->getName());
 		chan++;
@@ -161,6 +147,7 @@ void Server::leaveChannel(Client& client)
 	std::vector<std::string>::const_iterator it = empty_chan.begin();
 	while (it != empty_chan.end())
 	{
+		delete this->_channels.find(*it)->second;
 		this->_channels.erase(*it);
 		it++;
 	}
@@ -174,7 +161,8 @@ void Server::partChannel(std::string chan, Client& client)
 		_channels.at(chan)->removeOp(client);
 	}
 	else
-		client << ERR_NOSUCHCHANNEL(chan);
+		client << ERR_NOSUCHCHANNEL(client.getNickname(), chan);
+	eraseEmptyChan();
 }
 
 Channel* Server::findChannel(std::string name)

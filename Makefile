@@ -6,7 +6,7 @@
 #    By: emenella <emenella@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/14 11:09:51 by bmangin           #+#    #+#              #
-#    Updated: 2022/09/14 17:49:41 by emenella         ###   ########.fr        #
+#    Updated: 2022/09/19 18:26:50 by emenella         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ NAME := ircserv
 FILES_IRC			:= Server Channel
 FILES_SOCK			:= Socket SocketConnection SocketListener SocketServer
 FILES_USER			:= Client ACommand AuthenticationCommand
-FILES_COMMAND		:= NICK PASS JOIN USER PING PART NAMES TOPIC PRIVMSG NOTICE KICK
+FILES_COMMAND		:= NICK PASS JOIN USER PING PART NAMES TOPIC PRIVMSG LIST QUIT MODE INVITE NOTICE KICK
 
 FILES				= ${addprefix ${PATH_IRC}/, ${FILES_IRC}} \
 					${addprefix ${PATH_SOCK}/, ${FILES_SOCK}} \
@@ -37,15 +37,13 @@ FILES				= ${addprefix ${PATH_IRC}/, ${FILES_IRC}} \
 					${addprefix ${PATH_C}/, ${FILES_COMMAND}}
 
 SRCS				= ${addprefix ${PATH_S}/, ${addsuffix .cpp, ${FILES}}} main.cpp
-HEADER				:= ${addprefix ${PATH_I}/, ${addsuffix .hpp, ${FILES}}}
+HEADER				:= ${addprefix ${PATH_I}/, ${addsuffix .hpp, ${FILES}}} includes/client/REPLY.hpp
 OBJS				:= ${addprefix ${PATH_B}/, ${notdir ${SRCS:.cpp=.o}}}
 
 INC		:= -I${PATH_I}
 CC		:= g++
 FLAG	:= -Wall -Werror -Wextra
 CPP_V	:= -std=c++98
-DEB		:= -D DEBUG=1
-FS		:= -g3 -fsanitize=address 
 CCF		:= ${CC} ${FLAG} ${CPP_V} ${INC}
 CCFS	:= ${CC} ${FLAG} ${CPP_V} ${FS} ${INC} ${DEB}
 CCD		:= ${CC} ${FLAG} ${CPP_V} ${INC} ${DEB}
@@ -58,12 +56,6 @@ bin:
 
 $(NAME): $(OBJS)
 	$(CCF) -o $(NAME) $(OBJS)
-
-deb: $(OBJS)
-	$(CCD) -o $(NAME) $(OBJS)
-
-fs: $(OBJS)
-	$(CCFS) -o $(NAME) $(OBJS)
 	
 ${PATH_B}/%.o: %.cpp ${HEADER}
 	$(CCF) -o $@ -c $<
@@ -72,10 +64,6 @@ clean:
 	${RM} $(OBJS) 
 
 fclean:
-	${RM} $(NAME) $(OBJS) 
-
-debug: fclean deb
-
-seg: fclean fs
+	${RM} $(NAME) $(OBJS)
 
 re: fclean all

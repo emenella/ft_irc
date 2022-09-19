@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:28:14 by emenella          #+#    #+#             */
-/*   Updated: 2022/09/08 16:30:14 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/19 18:29:11 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,6 @@ Socket::~Socket()
 int Socket::getSock() const
 {
     return this->sock;
-}
-
-void Socket::setSock(int sock)
-{
-    this->sock = sock;
 }
 
 void Socket::close()

@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:28:41 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/07 16:13:05 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/19 18:29:37 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <fcntl.h>
-
-#define PURE = 0
 
 class Socket
 {
@@ -49,5 +47,4 @@ class Socket
                 virtual const char *what() const throw(){ return msg.c_str();}
         };
         int getSock() const;
-        void setSock(int sock);
 };

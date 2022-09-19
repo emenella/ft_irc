@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 11:04:28 by emenella          #+#    #+#             */
-/*   Updated: 2022/09/13 18:24:00 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/19 18:20:10 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,16 +58,21 @@ int PRIVMSG::execute(Client &clicli, args_t::iterator begin, args_t::iterator en
                 if ((*it)[0] == '#')
                 {
                     Channel* channel = _serv->findChannel(*it);
-                    if (channel != NULL)
-                        channel->message(clicli, PRIVMSG_MESSAGE(clicli.getNickname(), channel->getName(), msg));
-                    else
-                        clicli << ERR_NOSUCHCHANNEL(*it);
-                }
+					if (channel != NULL)
+					{
+						if (channel->isClient(&clicli))
+							channel->message(clicli, PRIVMSG_MESSAGE(clicli.getNickname(), clicli.getUsername(), clicli.getAddr(), channel->getName(), msg));
+						else
+							clicli << ERR_NOTONCHANNEL(*it);
+					}
+					else
+						clicli << ERR_NOSUCHCHANNEL(clicli.getNickname(), *it);
+				}
                 else
                 {
                     Client* client = _serv->findClient(*it);
                     if (client != NULL)
-                        *client << PRIVMSG_MESSAGE(clicli.getNickname(), client->getNickname(), msg);
+                        *client << PRIVMSG_MESSAGE(clicli.getNickname(), clicli.getUsername(), clicli.getAddr(), client->getNickname(), msg);
                     else
                         clicli << ERR_NOSUCHNICK(*it);
                 }

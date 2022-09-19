@@ -65,7 +65,7 @@ int TOPIC::execute(Client &clicli, args_t::iterator begin, args_t::iterator end)
 					clicli << ERR_NOTONCHANNEL(*begin);
 			}
 			else
-				clicli << ERR_NOSUCHCHANNEL(*begin);
+				clicli << ERR_NOSUCHCHANNEL(clicli.getNickname(), *begin);
 		}
 		else
 		{
@@ -82,7 +82,7 @@ int TOPIC::execute(Client &clicli, args_t::iterator begin, args_t::iterator end)
 					clicli << ERR_NOTONCHANNEL(*begin);
 			}
 			else
-				clicli << ERR_NOSUCHCHANNEL(*begin);
+				clicli << ERR_NOSUCHCHANNEL(clicli.getNickname(), *begin);
 		}
 	}
 	else

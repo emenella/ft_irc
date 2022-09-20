@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:40:56 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/08 16:16:06 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/20 18:00:43 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 Client::Client(int sock, sockaddr_in &addr, SocketServer &srv) : SocketConnection(sock, addr),
 											_nickname(""), _username(""),
 											_hostname(""), _servername(""),
-											_serverHostname(srv.getHostname()),
+											_serverHostname(srv.getHostname()), _serverIP(srv.getIP()),
 											_realname(""), _password(""),
 											_register(false), _op(false)
 {
@@ -99,6 +99,11 @@ std::string                         Client::getHostname() const
 std::string                         Client::getServerName() const
 {
 	return _servername;
+}
+
+std::string                         Client::getServerIp() const
+{
+	return _serverIP;
 }
 
 std::string                         Client::getServerHostname() const

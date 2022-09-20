@@ -6,13 +6,13 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:44:27 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/19 18:53:35 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/20 16:56:26 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc/Server.hpp"
 
-Server::Server(int port, std::string password, std::string hostname, bool verbose) : SocketServer(hostname, port, verbose), _password(password)
+Server::Server(int port, std::string password, bool verbose): SocketServer(port, verbose), _password(password)
 {
 	
 	signal(SIGINT, SocketServer::stop);

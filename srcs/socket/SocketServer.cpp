@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:28:25 by emenella          #+#    #+#             */
-/*   Updated: 2022/09/13 19:02:46 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/20 18:25:24 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,19 @@ bool SocketServer::isRunning = false;
 
 SocketServer::SocketServer(std::string const& hostname, int service, bool verbose = false): SocketListener(), isVerbose(verbose), hostname(hostname), service(service), timeout(TIMEOUT)
 {
+    if (isVerbose)
+        std::cout << "SocketServer::SocketServer()" << std::endl;
+   pushFd(sock, POLLIN);
+}
+
+SocketServer::SocketServer(int service, bool verbose = false): SocketListener(), isVerbose(verbose), hostname(""), service(service), timeout(TIMEOUT)
+{
+    char host[256];
+    struct hostent *host_entry;
+    gethostname(host, sizeof(host));
+    host_entry = gethostbyname(host);
+    this->hostname = host;
+    this->IP = inet_ntoa(*((struct in_addr*) host_entry->h_addr_list[0]));
     if (isVerbose)
         std::cout << "SocketServer::SocketServer()" << std::endl;
    pushFd(sock, POLLIN);
@@ -69,7 +82,7 @@ void	SocketServer::onMessage(Connection& connection, std::string const& message)
 
 void SocketServer::start()
 {
-    bind(this->hostname, this->service);
+    bind(this->IP, this->service);
     listen();
     isRunning = true;
     while (isRunning)
@@ -134,6 +147,7 @@ void SocketServer::receiveAndSend(Connection &connection)
                 message.erase(0, pos + 2);
             }
         }
+        connection.readBuffer += message;
     }
     catch (SocketException const& e)
     {
@@ -186,10 +200,15 @@ void SocketServer::listen()
 {
     SocketListener::listen();
     if (isVerbose)
-        std::cout << "Listening on " << hostname << ":" << service << std::endl;
+        std::cout << "Listening on " << IP << ":" << service << std::endl;
 }
 
 std::string SocketServer::getHostname() const
 {
     return hostname;
+}
+
+std::string SocketServer::getIP() const
+{
+    return IP;
 }

@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:28:22 by emenella          #+#    #+#             */
-/*   Updated: 2022/09/07 17:56:44 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/20 18:28:14 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,9 @@ void SocketListener::listen()
 
 int SocketListener::accept(sockaddr_in &clientAddr)
 {
-    socklen_t addrsize;
-    int sock = ::accept(this->sock, (struct sockaddr *)&clientAddr, &addrsize);
+    socklen_t addrsize = sizeof(clientAddr);
+    int sock = ::accept(this->sock, (struct sockaddr*)&clientAddr, &addrsize);
+    std::cout << inet_ntoa(clientAddr.sin_addr) << std::endl;
     if (sock == -1)
         throw SocketException("Socket accept failed");
     return sock;

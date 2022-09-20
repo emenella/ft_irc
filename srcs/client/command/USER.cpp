@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:28:02 by emenella          #+#    #+#             */
-/*   Updated: 2022/05/17 17:45:09 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/20 18:33:05 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int USER::execute(Client &clicli, args_t::iterator begin, args_t::iterator end)
     else
     {
         clicli.setUsername(begin[1]);
-        clicli.setHostname(begin[2]);
+        clicli.setHostname(clicli.getAddr());
         clicli.setServerName(begin[3]);
         clicli.setRealName(begin[4]);
         clicli.updateRegister();

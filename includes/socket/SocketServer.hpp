@@ -6,13 +6,14 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:31:47 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/13 18:57:34 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/20 18:27:36 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include <sys/poll.h>
+#include <netdb.h>
 #include "socket/SocketConnection.hpp"
 #include "socket/SocketListener.hpp"
 
@@ -24,9 +25,9 @@ class SocketServer: public SocketListener
         typedef SocketConnection                Connection;
         typedef	std::pair<int, Connection*>     ConnectionPair;
 	    typedef	std::map<int, Connection*>		ConnectionMap;
-	    typedef	std::queue<int>					ConnectionQueue;
         
         SocketServer(std::string const& hostname, int service, bool verbose);
+        SocketServer(int service, bool verbose);
         SocketServer(SocketServer const &src);
         SocketServer &operator=(SocketServer const &rhs);
         ~SocketServer();
@@ -41,6 +42,7 @@ class SocketServer: public SocketListener
         void poll();
         void listen();
         std::string getHostname() const;
+        std::string getIP() const;
      private:
         static bool isRunning;
         bool isVerbose;
@@ -48,12 +50,11 @@ class SocketServer: public SocketListener
         void popFd(int fd);
     protected:
         std::string                             hostname;
+        std::string                             IP;
         int                                     service;
         
         struct sockaddr_in                      addr;
-        socklen_t                               addrsize;
         ConnectionMap		                    fdConnectionMap;
-	    ConnectionQueue		                    disconnectedFds;
 
         std::vector<pollfd>                     pollFds;
         int                                     timeout;

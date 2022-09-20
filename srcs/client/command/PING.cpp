@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 18:49:26 by emenella          #+#    #+#             */
-/*   Updated: 2022/09/14 18:06:31 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/20 18:00:56 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ int PING::execute(Client &clicli, args_t::iterator begin, args_t::iterator end)
         }
         for (args_t::iterator it = begin; it != end; it++)
         {
-            if (clicli.getServerHostname() == *it)
-                clicli << "PONG " + clicli.getHostname();
+            if (clicli.getServerHostname() == *it || clicli.getServerIp() == *it)
+                clicli << "PONG " + clicli.getAddr();
         }
         return 0;
     }

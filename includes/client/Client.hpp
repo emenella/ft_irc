@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 19:30:04 by emenella          #+#    #+#             */
-/*   Updated: 2022/09/07 18:35:53 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/20 17:59:52 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class Client: public SocketConnection
         std::string                         _hostname;
         std::string                         _servername;
         std::string                         _serverHostname;
+        std::string                         _serverIP;
         std::string                         _realname;
         std::string                         _password;
         std::string                         _mode;
@@ -54,6 +55,7 @@ class Client: public SocketConnection
         std::string                         getHostname() const;
         std::string                         getServerName() const;
         std::string                         getServerHostname() const;
+        std::string                         getServerIp() const;
         std::string                         getRealName() const;
         std::string                         getPassword() const;
         std::string                         getMode() const;

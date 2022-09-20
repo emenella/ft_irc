@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:53:39 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/20 18:51:55 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/20 20:26:20 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void							Channel::setMods(std::string mods, Client & clicli)
 	switch (mods[0])
 	{
 		case '+':
-			if (mods.empty())
+			if (!mods.empty())
 			{
 				this->mods = mods;
 				std::vector<Client *>::const_iterator it = this->clientListBegin();

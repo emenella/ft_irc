@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:44:27 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/20 18:52:44 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/20 20:23:42 by ebellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,9 @@ void Server::onConnection(int connectionFd, sockaddr_in& address)
 void Server::onDisconnection(Connection& connection)
 {
 	Client &client = static_cast<Client&>(connection);
+	QUIT util = QUIT(this);
+	std::vector<std::string>::iterator it; 
+	util.execute(client, it, it);
 	SocketServer::onDisconnection(connection);
 	std::cout << "Disconnection IRC of " << client << std::endl;
 	fdConnectionMap.erase(connection.getSock());

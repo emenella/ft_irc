@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   AuthenticationCommand.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:28:08 by emenella          #+#    #+#             */
-/*   Updated: 2022/09/07 19:43:48 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/20 18:39:49 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int AuthenticationCommand::execute(Client &clicli, args_t::iterator begin, args_
     {
         return 0;
     }
-    if (clicli.getPassword() == _serv->getPassword())
+    if (clicli.getPassword() == serv->getPassword())
     {
         clicli.setRegister(true);
         return 1;

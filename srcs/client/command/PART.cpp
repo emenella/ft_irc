@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PART.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:27:51 by emenella          #+#    #+#             */
-/*   Updated: 2022/09/15 15:34:08 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/20 18:39:49 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int PART::execute(Client &clicli, args_t::iterator begin, args_t::iterator end)
 		{
 			if ((*begin)[0] == ':')
 				break ;
-			_serv->partChannel(*begin, clicli);
+			serv->partChannel(*begin, clicli);
 		}
 	else
         clicli << ERR_NOTREGISTERED;

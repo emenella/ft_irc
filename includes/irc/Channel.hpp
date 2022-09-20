@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 21:32:08 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/15 19:32:19 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/20 18:50:38 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@ class Channel
 {
 	typedef std::vector<Client *> clientList;
 	private:
-		std::string					_name;
-		std::string					_topic;
-		std::string					_mods;
-		clientList					_opList;
-		clientList					_clientList;
-		clientList					_invitList;
+		std::string					name;
+		std::string					topic;
+		std::string					mods;
+		clientList					opList;
+		clientList					client;
+		clientList					invit;
 		
 	public:
 		Channel(std::string name, Client & clicli);

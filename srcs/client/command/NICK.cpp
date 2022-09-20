@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 15:07:06 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/13 14:50:23 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/20 18:39:49 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ NICK::NICK(NICK const& src) : ACommand(src)
 {
 	if (this != &src)
 	{
-        this->_serv = src._serv;
+        this->serv = src.serv;
 	}
 }
 
@@ -31,7 +31,7 @@ NICK::~NICK()
 
 int NICK::unique_nick(std::string nick)
 {
-	if (_serv->findClient(nick) != NULL)
+	if (serv->findClient(nick) != NULL)
 		return (0);
 	return (1);
 }

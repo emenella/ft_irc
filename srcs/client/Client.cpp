@@ -6,18 +6,18 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:40:56 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/20 18:00:43 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/20 18:47:17 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client/Client.hpp"
 
 Client::Client(int sock, sockaddr_in &addr, SocketServer &srv) : SocketConnection(sock, addr),
-											_nickname(""), _username(""),
-											_hostname(""), _servername(""),
-											_serverHostname(srv.getHostname()), _serverIP(srv.getIP()),
-											_realname(""), _password(""),
-											_register(false), _op(false)
+											nickname(""), username(""),
+											hostname(""), servername(""),
+											serverHostname(srv.getHostname()), serverIP(srv.getIP()),
+											realname(""), password(""),
+											isregister(false), isop(false)
 {
 }
 
@@ -25,14 +25,14 @@ Client::Client(Client const &rhs) : SocketConnection(rhs)
 {
 	if (this != &rhs)
 	{
-		_nickname = rhs._nickname;
-		_username = rhs._username;
-		_hostname = rhs._hostname;
-		_servername = rhs._servername;
-		_realname = rhs._realname;
-		_password = rhs._password;
-		_register = rhs._register;
-		_op = rhs._op;
+		nickname = rhs.nickname;
+		username = rhs.username;
+		hostname = rhs.hostname;
+		servername = rhs.servername;
+		realname = rhs.realname;
+		password = rhs.password;
+		isregister = rhs.isregister;
+		isop = rhs.isop;
 	}
 }
 
@@ -48,97 +48,97 @@ Client								&Client::operator=(Client const &rhs)
 
 void                                Client::setNickname(std::string nickname)
 {
-	_nickname = nickname;
+	this->nickname = nickname;
 }
 
 void                                Client::setUsername(std::string username)
 {
-	_username = username;
+	this->username = username;
 }
 
 void                                Client::setHostname(std::string hostname)
 {
-	_hostname = hostname;
+	this->hostname = hostname;
 }
 
 void                                Client::setServerName(std::string nameserver)
 {
-	_servername = nameserver;
+	servername = nameserver;
 }
 
 void                                Client::setRealName(std::string realname)
 {
-	_realname = realname;
+	this->realname = realname;
 }
 
 void                                Client::setPassword(std::string password)
 {
-	_password = password;
+	this->password = password;
 }
 
 bool 							  Client::getRegister() const
 {
-	return (_register);
+	return (isregister);
 }	
 
 std::string                         Client::getUsername() const
 {
-	return _username;
+	return username;
 }
 
 std::string                         Client::getNickname() const
 {
-	return _nickname;
+	return nickname;
 }
 
 std::string                         Client::getHostname() const
 {
-	return _hostname;
+	return hostname;
 }
 
 std::string                         Client::getServerName() const
 {
-	return _servername;
+	return servername;
 }
 
 std::string                         Client::getServerIp() const
 {
-	return _serverIP;
+	return serverIP;
 }
 
 std::string                         Client::getServerHostname() const
 {
-	return _serverHostname;
+	return serverHostname;
 }
 
 std::string                         Client::getRealName() const
 {
-	return _realname;
+	return realname;
 }
 
 std::string                         Client::getPassword() const
 {
-	return _password;
+	return password;
 }
 
 std::string                         Client::getMode() const
 {
-	return _mode;
+	return mode;
 }
 
 std::map<std::string ,Channel*>     Client::getChannels() const
 {
-	return _channels;
+	return channels;
 }
 
 bool                                Client::getOp() const
 {
-	return _op;
+	return isop;
 }
 
 void                                Client::readChannels() const
 {
-	for (std::map<std::string, Channel*>::const_iterator it = _channels.begin(); it != _channels.end(); ++it)
+	for (std::map<std::string, Channel*>::const_iterator it = channels.begin(); it != channels.end(); ++it)
 	{
 		std::cout << it->first << std::endl;
 	}
@@ -146,7 +146,7 @@ void                                Client::readChannels() const
 		
 bool                                Client::isInChannel(std::string name) const
 {
-	for (std::map<std::string ,Channel*>::const_iterator it = _channels.begin(); it != _channels.end(); ++it)
+	for (std::map<std::string ,Channel*>::const_iterator it = channels.begin(); it != channels.end(); ++it)
 		if (it->first == name)
 			return true;
 	return false;
@@ -164,12 +164,12 @@ std::ostream &						operator<<(std::ostream & o, Client const &rhs)
 
 void							Client::setRegister(bool bool_)
 {
-	_register = bool_;
+	isregister = bool_;
 }
 
 void Client::updateRegister()
 {
-	if (_register)
+	if (isregister)
 		return ;
     if (this->getNickname().empty() || this->getPassword().empty() || this->getUsername().empty() || this->getRealName().empty() || this->getHostname().empty())
     {

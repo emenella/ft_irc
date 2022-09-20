@@ -12,11 +12,11 @@
 
 #include "client/ACommand.hpp"
 
-ACommand::ACommand(Server *serv) : _serv(serv)
+ACommand::ACommand(Server *serv) : serv(serv)
 {
 }
 
-ACommand::ACommand(ACommand const& src)  : _serv(src._serv)
+ACommand::ACommand(ACommand const& src)  : serv(src.serv)
 {
     #ifdef DEBUG
         std::cout << "Copy Constructeur Called" << std::endl;
@@ -33,12 +33,12 @@ ACommand&   ACommand::operator=(ACommand const& rhs)
 {
 	if (this != &rhs)
 	{
-		this->_serv = rhs._serv;
+		this->serv = rhs.serv;
 	}
 	return *this;
 }
 
 const Server *				ACommand::getServ() const
 {
-	return this->_serv;
+	return this->serv;
 }

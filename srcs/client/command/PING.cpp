@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 18:49:26 by emenella          #+#    #+#             */
-/*   Updated: 2022/09/20 18:00:56 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/20 18:39:49 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ PING::PING(PING const& src): AuthenticationCommand(src)
 {
     if (this != &src)
     {
-        this->_serv = src._serv;
+        this->serv = src.serv;
     }
 }
 PING::~PING()

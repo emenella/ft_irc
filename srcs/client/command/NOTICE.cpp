@@ -6,7 +6,7 @@ NOTICE::NOTICE(Server *serv): PRIVMSG(serv)
 
 }
 
-NOTICE::NOTICE(NOTICE const& src): PRIVMSG(src._serv)
+NOTICE::NOTICE(NOTICE const& src): PRIVMSG(src.serv)
 {
 
 }
@@ -45,7 +45,7 @@ int NOTICE::execute(Client &clicli, args_t::iterator begin, args_t::iterator end
             {
                 if ((*it)[0] == '#')
                 {
-                    Channel* channel = _serv->findChannel(*it);
+                    Channel* channel = serv->findChannel(*it);
                     if (channel != NULL)
                         channel->message(clicli, NOTICE_MESSAGE(clicli.getNickname(), clicli.getUsername(), clicli.getAddr(), channel->getName(), msg));
                     else
@@ -53,7 +53,7 @@ int NOTICE::execute(Client &clicli, args_t::iterator begin, args_t::iterator end
                 }
                 else
                 {
-                    Client* client = _serv->findClient(*it);
+                    Client* client = serv->findClient(*it);
                     if (client != NULL)
                         *client << NOTICE_MESSAGE(clicli.getNickname(), clicli.getUsername(), clicli.getAddr(), client->getNickname(), msg);
                     else

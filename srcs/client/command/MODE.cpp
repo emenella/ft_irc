@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MODE.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebellon <ebellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:27:51 by emenella          #+#    #+#             */
-/*   Updated: 2022/09/15 17:49:07 by ebellon          ###   ########lyon.fr   */
+/*   Updated: 2022/09/20 18:39:49 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,17 @@ int MODE::execute(Client &clicli, args_t::iterator begin, args_t::iterator end)
 			clicli << ERR_NEEDMOREPARAMS("MODE");
 			return 0;
 		}
-		if (_serv->getChannelMap().find(*begin) == _serv->getChannelMap().end())
+		if (serv->getChannelMap().find(*begin) == serv->getChannelMap().end())
 		{
 			clicli << ERR_NOSUCHCHANNEL(clicli.getNickname(), *begin);
 			return 0;
 		}
 		if (begin + 1 == end)
 		{
-			clicli << RPL_CHANNELMODEIS(clicli.getNickname(), *begin, _serv->getChannelMap().find(*begin)->second->getMods());
+			clicli << RPL_CHANNELMODEIS(clicli.getNickname(), *begin, serv->getChannelMap().find(*begin)->second->getMods());
 			return 1;
 		}
-		_serv->getChannelMap().find(*begin)->second->setMods(*(begin + 1), clicli);
+		serv->getChannelMap().find(*begin)->second->setMods(*(begin + 1), clicli);
 	}
 	else
         clicli << ERR_NOTREGISTERED;

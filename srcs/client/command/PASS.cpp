@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:27:56 by emenella          #+#    #+#             */
-/*   Updated: 2022/05/17 17:37:39 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/20 18:39:49 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ PASS::PASS(PASS const& src) : ACommand(src)
 {
     if (this != &src)
     {
-        this->_serv = src._serv;
+        this->serv = src.serv;
     }
 }
 

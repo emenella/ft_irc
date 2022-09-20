@@ -12,8 +12,6 @@
 #define RPL_CHANNELMODEIS(client, channel, modes) "324 " + client  + " " + channel + " " + modes
 #define RPL_INVITING(client, nick, chan) "341 " + client  + " " + nick + " " + chan
 
-
-// #define PRIVMSG_MESSAGE(sender, receiver, message) ":" + sender + " PRIVMSG " + receiver + " :" + message
 #define PRIVMSG_MESSAGE(nick, userName, userIP, receiver, message) ":" + nick + "!" + userName + "@" + userIP +  " PRIVMSG " + receiver + " :" + message
 #define NOTICE_MESSAGE(nick, userName, userIP, receiver, message) ":" + nick + "!" + userName + "@" + userIP + " NOTICE " + receiver + " :" + message
 #define JOIN_MESSAGE(nick, userName, userIP, channel) ":" + nick + "!" + userName + "@" + userIP + " JOIN " + channel

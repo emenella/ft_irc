@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 11:04:28 by emenella          #+#    #+#             */
-/*   Updated: 2022/09/19 18:20:10 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/20 18:39:49 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int PRIVMSG::execute(Client &clicli, args_t::iterator begin, args_t::iterator en
             {
                 if ((*it)[0] == '#')
                 {
-                    Channel* channel = _serv->findChannel(*it);
+                    Channel* channel = serv->findChannel(*it);
 					if (channel != NULL)
 					{
 						if (channel->isClient(&clicli))
@@ -70,7 +70,7 @@ int PRIVMSG::execute(Client &clicli, args_t::iterator begin, args_t::iterator en
 				}
                 else
                 {
-                    Client* client = _serv->findClient(*it);
+                    Client* client = serv->findClient(*it);
                     if (client != NULL)
                         *client << PRIVMSG_MESSAGE(clicli.getNickname(), clicli.getUsername(), clicli.getAddr(), client->getNickname(), msg);
                     else

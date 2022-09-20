@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 19:30:04 by emenella          #+#    #+#             */
-/*   Updated: 2022/09/20 17:59:52 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/20 18:45:02 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,18 @@ class Channel;
 class Client: public SocketConnection
 {
     private:
-        std::string                         _nickname;
-        std::string                         _username;
-        std::string                         _hostname;
-        std::string                         _servername;
-        std::string                         _serverHostname;
-        std::string                         _serverIP;
-        std::string                         _realname;
-        std::string                         _password;
-        std::string                         _mode;
-        std::map<std::string ,Channel*>     _channels;
-        bool                                _register;
-        bool                                _op;
+        std::string                         nickname;
+        std::string                         username;
+        std::string                         hostname;
+        std::string                         servername;
+        std::string                         serverHostname;
+        std::string                         serverIP;
+        std::string                         realname;
+        std::string                         password;
+        std::string                         mode;
+        std::map<std::string ,Channel*>     channels;
+        bool                                isregister;
+        bool                                isop;
         
     public:
         Client(int sock, sockaddr_in &addr, SocketServer &srv);

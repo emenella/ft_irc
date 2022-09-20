@@ -6,14 +6,14 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:53:39 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/19 17:52:09 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/20 18:51:55 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc/Channel.hpp"
 
 
-Channel::Channel(std::string name, Client & clicli) : _name(name)
+Channel::Channel(std::string name, Client & clicli) : name(name)
 {
 	this->addOp(clicli);
 	this->addClient(clicli);
@@ -26,8 +26,8 @@ Channel & Channel::operator=(Channel const &rhs)
 {
 	if (this != &rhs)
 	{
-		_name = rhs._name;
-		_clientList = rhs._clientList;
+		name = rhs.name;
+		client = rhs.client;
 	}
 	return *this;
 }
@@ -37,17 +37,17 @@ Channel::~Channel()
 
 std::string	const				Channel::getName() const
 {
-	return _name;
+	return name;
 }
 
 std::string	const				Channel::getMods() const
 {
-	return this->_mods;
+	return this->mods;
 }
 
 std::string	const				Channel::getTopic() const
 {
-	return this->_topic;
+	return this->topic;
 }
 
 size_t							Channel::getNbClients() const
@@ -57,14 +57,14 @@ size_t							Channel::getNbClients() const
 
 void							Channel::setTopic(std::string topic)
 {
-	this->_topic = topic;
+	this->topic = topic;
 	std::vector<Client *>::const_iterator it = this->clientListBegin();
 	while (it != this->clientListEnd())
 	{
-		if (!_topic.empty())
-			*(*it) << RPL_TOPIC((*it)->getNickname(), this->_name, this->_topic);
+		if (!topic.empty())
+			*(*it) << RPL_TOPIC((*it)->getNickname(), this->name, this->topic);
 		else
-			*(*it) << RPL_NOTOPIC((*it)->getNickname(), this->_name);
+			*(*it) << RPL_NOTOPIC((*it)->getNickname(), this->name);
 		it++;
 	}
 }
@@ -73,7 +73,7 @@ void							Channel::setMods(std::string mods, Client & clicli)
 {
 	if (!isOp(&clicli))
 	{
-		clicli << ERR_CHANOPRIVSNEEDED(clicli.getNickname(), this->_name);
+		clicli << ERR_CHANOPRIVSNEEDED(clicli.getNickname(), this->name);
 		return ;
 	}
 	if (!(mods[0] == '+' || mods[0] == '-') || mods[1] != 'i')
@@ -81,9 +81,9 @@ void							Channel::setMods(std::string mods, Client & clicli)
 	switch (mods[0])
 	{
 		case '+':
-			if (_mods.empty())
+			if (mods.empty())
 			{
-				this->_mods = mods;
+				this->mods = mods;
 				std::vector<Client *>::const_iterator it = this->clientListBegin();
 				while (it != this->clientListEnd())
 				{
@@ -93,9 +93,9 @@ void							Channel::setMods(std::string mods, Client & clicli)
 				return ;
 			}
 		case '-':
-			if (!_mods.empty())
+			if (!mods.empty())
 			{
-				this->_mods.clear();
+				this->mods.clear();
 				std::vector<Client *>::const_iterator it = this->clientListBegin();
 				while (it != this->clientListEnd())
 				{
@@ -109,22 +109,22 @@ void							Channel::setMods(std::string mods, Client & clicli)
 
 std::vector<Client *>::const_iterator Channel::clientListBegin() const
 {
-	return _clientList.begin();
+	return client.begin();
 }
 
 std::vector<Client *>::const_iterator Channel::clientListEnd() const
 {
-	return _clientList.end();
+	return client.end();
 }
 
 std::vector<Client *>::const_iterator Channel::opListBegin() const
 {
-	return _opList.begin();
+	return opList.begin();
 }
 
 std::vector<Client *>::const_iterator Channel::opListEnd() const
 {
-	return _opList.end();
+	return opList.end();
 }
 
 bool							Channel::isOp(Client * clicli) const
@@ -153,8 +153,8 @@ bool							Channel::isClient(Client * clicli) const
 
 bool							Channel::isInvit(Client * clicli) const
 {
-	std::vector<Client *>::const_iterator client = this->_invitList.begin();
-	while (client != this->_invitList.end())
+	std::vector<Client *>::const_iterator client = this->invit.begin();
+	while (client != this->invit.end())
 	{
 		if ((*client) == clicli)
 			return true;
@@ -189,17 +189,17 @@ void							Channel::addClient(Client& client)
 			return ;
 		it++;
 	}
-	this->_clientList.push_back(&client);
+	this->client.push_back(&client);
 	it = this->clientListBegin();
 	while (it != this->clientListEnd())
 	{
 		*(*it) << JOIN_MESSAGE(client.getNickname(), client.getUsername(), client.getAddr(), this->getName());
 		it++;
 	}
-	if (!this->_topic.empty())
-		client << RPL_TOPIC(client.getNickname(), this->_name, this->_topic);
-	client << RPL_NAMREPLY(client.getNickname(), this->_name, this->listClients());
-	client << RPL_ENDOFNAMES(client.getNickname(), this->_name);
+	if (!this->topic.empty())
+		client << RPL_TOPIC(client.getNickname(), this->name, this->topic);
+	client << RPL_NAMREPLY(client.getNickname(), this->name, this->listClients());
+	client << RPL_ENDOFNAMES(client.getNickname(), this->name);
 }
 
 void							Channel::removeClient(Client& client)
@@ -216,7 +216,7 @@ void							Channel::removeClient(Client& client)
 				*(*chan_user) << PART_MESSAGE(client.getNickname(), client.getUsername(), client.getAddr(), this->getName());
 				chan_user++;
 			}
-			this->_clientList.erase(it);
+			this->client.erase(it);
 			return ;
 		}
 		it++;
@@ -227,25 +227,25 @@ void							Channel::removeClient(Client& client)
 void							Channel::addInvit(Client & invit)
 {
 	std::vector<Client *>::const_iterator it;
-	it = this->_invitList.begin();
-	while (it != this->_invitList.end())
+	it = this->invit.begin();
+	while (it != this->invit.end())
 	{
 		if ((*it)->getSock() == invit.getSock())
 			return ;
 		it++;
 	}
-	this->_invitList.push_back(&invit);
+	this->invit.push_back(&invit);
 }
 
 void							Channel::removeInvit(Client & invit)
 {
 	std::vector<Client *>::const_iterator it;
-	it = this->_invitList.begin();
-	while (it != this->_invitList.end())
+	it = this->invit.begin();
+	while (it != this->invit.end())
 	{
 		if ((*it)->getSock() == invit.getSock())
 		{
-			this->_invitList.erase(it);
+			this->invit.erase(it);
 			break ;
 		}
 		it++;
@@ -262,7 +262,7 @@ void							Channel::addOp(Client& op)
 			return ;
 		it++;
 	}
-	this->_opList.push_back(&op);
+	this->opList.push_back(&op);
 }
 
 void							Channel::removeOp(Client& op)
@@ -273,18 +273,18 @@ void							Channel::removeOp(Client& op)
 	{
 		if ((*it)->getSock() == op.getSock())
 		{
-			this->_opList.erase(it);
+			this->opList.erase(it);
 			break ;
 		}
 		it++;
 	}
-	if (this->_opList.empty() && !this->_clientList.empty())
-		addOp(*this->_clientList[0]);
+	if (this->opList.empty() && !this->client.empty())
+		addOp(*this->client[0]);
 }
 
 bool							Channel::isEmpty() const
 {
-	return this->_clientList.empty();
+	return this->client.empty();
 }
 
 void							Channel::message(Client &client, std::string msg)

@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/14 17:53:09 by emenella          #+#    #+#             */
-/*   Updated: 2022/09/19 18:15:21 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/20 18:39:49 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ KICK::KICK(Server *serv): AuthenticationCommand(serv)
 
 }
 
-KICK::KICK(KICK const& src): AuthenticationCommand(src._serv)
+KICK::KICK(KICK const& src): AuthenticationCommand(src.serv)
 {
 
 }
@@ -43,8 +43,8 @@ int KICK::execute(Client &clicli, args_t::iterator begin, args_t::iterator end)
             for (args_t::iterator it = begin + 3; it != end; it++)
                 message += *it + " ";
             message.erase(0, 1);
-            Client *client = _serv->findClient(nick);
-            Channel *chan = _serv->findChannel(channel);
+            Client *client = serv->findClient(nick);
+            Channel *chan = serv->findChannel(channel);
             if (!client)
             {
                 clicli << ERR_NOSUCHNICK(nick);

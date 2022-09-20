@@ -49,9 +49,9 @@ int NAMES::execute(Client &clicli, args_t::iterator begin, args_t::iterator end)
 			
 			while (chan != chanVec.end())
 			{
-				if (_serv->getChannelMap().find(*chan) != _serv->getChannelMap().end())
+				if (serv->getChannelMap().find(*chan) != serv->getChannelMap().end())
 				{
-					clicli << RPL_NAMREPLY(clicli.getNickname(), *chan, _serv->getChannelMap().find(*chan)->second->listClients());
+					clicli << RPL_NAMREPLY(clicli.getNickname(), *chan, serv->getChannelMap().find(*chan)->second->listClients());
 					clicli << RPL_ENDOFNAMES(clicli.getNickname(), *chan);
 				}
 				else

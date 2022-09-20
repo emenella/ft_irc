@@ -52,12 +52,12 @@ int TOPIC::execute(Client &clicli, args_t::iterator begin, args_t::iterator end)
 		}
 		if (begin + 1 == end)
 		{
-			if (_serv->getChannelMap().find(*begin) != _serv->getChannelMap().end())
+			if (serv->getChannelMap().find(*begin) != serv->getChannelMap().end())
 			{
-				if (_serv->getChannelMap().find(*begin)->second->isClient(&clicli))
+				if (serv->getChannelMap().find(*begin)->second->isClient(&clicli))
 				{
-					if (!_serv->getChannelMap().find(*begin)->second->getTopic().empty())
-						clicli << RPL_TOPIC(clicli.getNickname(), *begin, _serv->getChannelMap().find(*begin)->second->getTopic());
+					if (!serv->getChannelMap().find(*begin)->second->getTopic().empty())
+						clicli << RPL_TOPIC(clicli.getNickname(), *begin, serv->getChannelMap().find(*begin)->second->getTopic());
 					else
 						clicli << RPL_NOTOPIC(clicli.getNickname(), *begin);
 				}
@@ -69,12 +69,12 @@ int TOPIC::execute(Client &clicli, args_t::iterator begin, args_t::iterator end)
 		}
 		else
 		{
-			if (_serv->getChannelMap().find(*begin) != _serv->getChannelMap().end())
+			if (serv->getChannelMap().find(*begin) != serv->getChannelMap().end())
 			{
-				if (_serv->getChannelMap().find(*begin)->second->isClient(&clicli))
+				if (serv->getChannelMap().find(*begin)->second->isClient(&clicli))
 				{
-					if (_serv->getChannelMap().find(*begin)->second->isOp(&clicli))
-						_serv->getChannelMap().find(*begin)->second->setTopic(unparseArg(begin + 1, end));
+					if (serv->getChannelMap().find(*begin)->second->isOp(&clicli))
+						serv->getChannelMap().find(*begin)->second->setTopic(unparseArg(begin + 1, end));
 					else
 						clicli << ERR_CHANOPRIVSNEEDED(clicli.getNickname(), *begin);
 				}

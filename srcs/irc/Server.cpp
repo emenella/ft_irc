@@ -6,31 +6,31 @@
 /*   By: emenella <emenella@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:44:27 by bmangin           #+#    #+#             */
-/*   Updated: 2022/09/20 16:56:26 by emenella         ###   ########.fr       */
+/*   Updated: 2022/09/20 18:52:44 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc/Server.hpp"
 
-Server::Server(int port, std::string password, bool verbose): SocketServer(port, verbose), _password(password)
+Server::Server(int port, std::string password, bool verbose): SocketServer(port, verbose), password(password)
 {
 	
 	signal(SIGINT, SocketServer::stop);
-	_commandes.insert(std::pair<std::string, ACommand*>("NICK", new NICK(this)));
-	_commandes.insert(std::pair<std::string, ACommand*>("PASS", new PASS(this)));
-	_commandes.insert(std::pair<std::string, ACommand*>("USER", new USER(this)));
-	_commandes.insert(std::pair<std::string, ACommand*>("JOIN", new JOIN(this)));
-	_commandes.insert(std::pair<std::string, ACommand*>("PING", new PING(this)));
-	_commandes.insert(std::pair<std::string, ACommand*>("PART", new PART(this)));
-	_commandes.insert(std::pair<std::string, ACommand*>("PRIVMSG", new PRIVMSG(this)));
-	_commandes.insert(std::pair<std::string, ACommand*>("NOTICE", new NOTICE(this)));
-	_commandes.insert(std::pair<std::string, ACommand*>("KICK", new KICK(this)));
-	_commandes.insert(std::pair<std::string, ACommand*>("NAMES", new NAMES(this)));
-	_commandes.insert(std::pair<std::string, ACommand*>("TOPIC", new TOPIC(this)));
-	_commandes.insert(std::pair<std::string, ACommand*>("LIST", new LIST(this)));
-	_commandes.insert(std::pair<std::string, ACommand*>("QUIT", new QUIT(this)));
-	_commandes.insert(std::pair<std::string, ACommand*>("MODE", new MODE(this)));
-	_commandes.insert(std::pair<std::string, ACommand*>("INVITE", new INVITE(this)));
+	commandes.insert(std::pair<std::string, ACommand*>("NICK", new NICK(this)));
+	commandes.insert(std::pair<std::string, ACommand*>("PASS", new PASS(this)));
+	commandes.insert(std::pair<std::string, ACommand*>("USER", new USER(this)));
+	commandes.insert(std::pair<std::string, ACommand*>("JOIN", new JOIN(this)));
+	commandes.insert(std::pair<std::string, ACommand*>("PING", new PING(this)));
+	commandes.insert(std::pair<std::string, ACommand*>("PART", new PART(this)));
+	commandes.insert(std::pair<std::string, ACommand*>("PRIVMSG", new PRIVMSG(this)));
+	commandes.insert(std::pair<std::string, ACommand*>("NOTICE", new NOTICE(this)));
+	commandes.insert(std::pair<std::string, ACommand*>("KICK", new KICK(this)));
+	commandes.insert(std::pair<std::string, ACommand*>("NAMES", new NAMES(this)));
+	commandes.insert(std::pair<std::string, ACommand*>("TOPIC", new TOPIC(this)));
+	commandes.insert(std::pair<std::string, ACommand*>("LIST", new LIST(this)));
+	commandes.insert(std::pair<std::string, ACommand*>("QUIT", new QUIT(this)));
+	commandes.insert(std::pair<std::string, ACommand*>("MODE", new MODE(this)));
+	commandes.insert(std::pair<std::string, ACommand*>("INVITE", new INVITE(this)));
 }
 
 Server::~Server() throw()
@@ -39,11 +39,11 @@ Server::~Server() throw()
 	{
 		delete it->second;
 	}
-	for (CommandMap::iterator it = _commandes.begin(); it != _commandes.end(); ++it)
+	for (CommandMap::iterator it = commandes.begin(); it != commandes.end(); ++it)
 	{
 		delete it->second;
 	}
-	for (ChannelMap::iterator it = _channels.begin(); it != _channels.end(); ++it)
+	for (ChannelMap::iterator it = channels.begin(); it != channels.end(); ++it)
 	{
 		delete it->second;
 	}
@@ -51,12 +51,12 @@ Server::~Server() throw()
 
 std::string 	Server::getPassword() const
 {
-	return _password;
+	return password;
 }
 
 void			Server::setPassword(std::string password)
 {
-	_password = password;
+	this->password = password;
 }
 
 void Server::onConnection(int connectionFd, sockaddr_in& address)
@@ -94,8 +94,8 @@ void Server::parseCommand(std::string const &message, Client& client)
 		i = pos + 1;
 	}
 	str.push_back(message.substr(i));
-	CommandMap::iterator it = _commandes.find(str[0]);
-	if (it != _commandes.end())
+	CommandMap::iterator it = commandes.find(str[0]);
+	if (it != commandes.end())
 	{
 		ACommand *command = it->second;
 		command->execute(client, str.begin(), str.end());
@@ -104,21 +104,21 @@ void Server::parseCommand(std::string const &message, Client& client)
 
 Server::ChannelMap	const & Server::getChannelMap() const
 {
-	return _channels;
+	return channels;
 }
 
 int Server::joinChannel(std::string const &name, Client& client)
 {
-	if (_channels.find(name) != _channels.end())
+	if (channels.find(name) != channels.end())
 	{
-		if (!_channels.at(name)->getMods().empty() && !_channels.at(name)->isInvit(&client))
+		if (!channels.at(name)->getMods().empty() && !channels.at(name)->isInvit(&client))
 		{
 			client << ERR_INVITEONLYCHAN(client.getNickname(), name);
 			return 0;
 		}
-		_channels.at(name)->addClient(client);
-		if (_channels.at(name)->isInvit(&client))
-			_channels.at(name)->removeInvit(client);
+		channels.at(name)->addClient(client);
+		if (channels.at(name)->isInvit(&client))
+			channels.at(name)->removeInvit(client);
 		return 1;
 	}
 	else
@@ -129,16 +129,16 @@ int Server::joinChannel(std::string const &name, Client& client)
 			client << ERR_BADCARCHAN(name);
 			return 0;
 		}
-		_channels.insert(std::pair<std::string, Channel *>(name, new Channel(name, client)));
+		channels.insert(std::pair<std::string, Channel *>(name, new Channel(name, client)));
 		return 1;
 	}
 }
 
 void Server::eraseEmptyChan()
 {
-	std::map<std::string, Channel*>::const_iterator chan = this->_channels.begin();
+	std::map<std::string, Channel*>::const_iterator chan = this->channels.begin();
 	std::vector<std::string> empty_chan;
-	while (chan != this->_channels.end())
+	while (chan != this->channels.end())
 	{
 		if (chan->second->isEmpty())
 			empty_chan.push_back(chan->second->getName());
@@ -147,18 +147,18 @@ void Server::eraseEmptyChan()
 	std::vector<std::string>::const_iterator it = empty_chan.begin();
 	while (it != empty_chan.end())
 	{
-		delete this->_channels.find(*it)->second;
-		this->_channels.erase(*it);
+		delete this->channels.find(*it)->second;
+		this->channels.erase(*it);
 		it++;
 	}
 }
 
 void Server::partChannel(std::string chan, Client& client)
 {
-	if (_channels.find(chan) != _channels.end())
+	if (channels.find(chan) != channels.end())
 	{
-		_channels.at(chan)->removeClient(client);
-		_channels.at(chan)->removeOp(client);
+		channels.at(chan)->removeClient(client);
+		channels.at(chan)->removeOp(client);
 	}
 	else
 		client << ERR_NOSUCHCHANNEL(client.getNickname(), chan);
@@ -167,8 +167,8 @@ void Server::partChannel(std::string chan, Client& client)
 
 Channel* Server::findChannel(std::string name)
 {
-	ChannelMap::iterator it = _channels.find(name);
-	if (it != _channels.end())
+	ChannelMap::iterator it = channels.find(name);
+	if (it != channels.end())
 		return it->second;
 	return NULL;
 }
